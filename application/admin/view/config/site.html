@@ -1,0 +1,101 @@
+{extend name="layout:base" /}
+{block name="main_content"}
+<form class="form-horizontal adminform" id="model-form" method="post">
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            站点名称：<span class="red">*</span>
+        </label>
+        <div class="col-sm-9">
+            <input type="text" name="title" value="{$settings.title|default=''}" class="col-xs-10 col-sm-5" required/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            SEO关键字：
+        </label>
+        <div class="col-sm-9">
+            <textarea  name="keywords" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9">{$settings.keywords|default=''}</textarea>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            SEO描述：
+        </label>
+        <div class="col-sm-9">
+            <textarea  name="description" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9">{$settings.description|default=''}</textarea>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            备案信息：
+        </label>
+        <div class="col-sm-9">
+            <textarea  name="icp" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9">{$settings.icp|default=''}</textarea>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            版权信息：
+        </label>
+        <div class="col-sm-9">
+            <textarea  name="copyright" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9">{$settings.copyright|default=''}</textarea>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">
+            统计代码：
+        </label>
+        <div class="col-sm-9">
+            <textarea  name="tongji" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9">{$settings.tongji|default=''}</textarea>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>重置
+            </button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name="page_js"}
+<script src="__TPADMIN_ASSETS__/plugins/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        validAndSubmitForm(
+            "form#model-form",
+            {
+                "title":{
+                    required: true,
+                    minlength: 2,
+                    maxlength: 10
+                }
+            },
+            {
+                "title":{
+                    required: "站点名称不能为空",
+                    minlength: "站点名称不能少于2个字符",
+                    maxlength: "站点名称不能超过10个字符"
+                }
+            }
+        );
+    });
+</script>
+{/block}

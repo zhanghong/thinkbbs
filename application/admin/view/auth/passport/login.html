@@ -1,0 +1,151 @@
+{extend name="layout/passport" /}
+{block name="page_style"}
+<style type="text/css">
+    .login .input-error{
+        color: #ff0000;
+    }
+</style>
+{/block}
+{block name="main"}
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="login-container">
+            <div class="center">
+                <h1>
+                    <i class="ace-icon fa fa-leaf green"></i>
+                    <span class="red">TPAdmin</span>
+                    <span class="white" id="id-text2">管理后台</span>
+                </h1>
+                <h4 class="blue" id="id-company-text">&copy; Laifuzi</h4>
+            </div>
+
+            <div class="space-6"></div>
+
+            <div class="position-relative">
+                <div id="login-box" class="login-box visible widget-box no-border">
+                    <div class="widget-body">
+                        <div class="widget-main">
+                            <h4 class="header blue lighter bigger">
+                                <i class="ace-icon fa fa-coffee green"></i>
+                                登录信息
+                            </h4>
+
+                            <div class="space-6"></div>
+
+                            <form method="post">
+                                <fieldset>
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input type="text" class="form-control" name="admin_account" placeholder="登录名" />
+                                            <i class="ace-icon fa fa-user"></i>
+                                        </span>
+                                    </label>
+
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input type="password" class="form-control" name="admin_password" placeholder="密码" />
+                                            <i class="ace-icon fa fa-lock"></i>
+                                        </span>
+                                    </label>
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input type="text" class="form-control" id="captcha" name="captcha"  placeholder="验证码" required style="width: 60%;float: left;">
+                                            <img id='img_captcha' src="{:captcha_src()}" alt="captcha" id="user-code-img" style="width: 40%;height: 34px;float: left;" onclick="this.src=this.src+'?t='+Math.random()" />
+                                        </span>
+                                    </label>
+
+                                    <div class="space"></div>
+
+                                    <div class="clearfix">
+                                        <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+                                            <i class="ace-icon fa fa-key"></i>
+                                            <span class="bigger-110">登录</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="space-4"></div>
+                                </fieldset>
+                            </form>
+                        </div><!-- /.widget-main -->
+                    </div><!-- /.widget-body -->
+                </div><!-- /.login-box -->
+            </div><!-- /.position-relative -->
+        </div>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{/block}
+{block name="footer"}
+<script src="__TPADMIN_ASSETS__/plugins/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        $("form").validate({
+            rules:{
+                "admin_account":{
+                    required: true,
+                    maxlength: 25
+                },"admin_password":{
+                    required: true,
+                    maxlength: 25
+                },"captcha":{
+                    required: true
+                }
+            },
+            messages:{
+                "admin_account":{
+                    required: "登录名不能为空",
+                    maxlength: "登录名最多不能超过25个字符"
+                },"admin_password":{
+                    required: "登录密码不能为空",
+                    maxlength: "密码最多不能超过25个字符"
+                },"captcha":{
+                    required: "验证码不能为空",
+                    minlength: "验证码不正确",
+                    maxlength: "验证码不正确"
+                }
+            },
+            errorElement: "span",
+            errorClass: "inline input-error",
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest('span.block').addClass('has-error');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest('span.block').removeClass('has-error');
+            },
+            errorPlacement: function (error, element) {
+                if (element.parent('span.block').length || element.prop('type') === 'checkbox' || element.prop('type') === 'radio') {
+                    error.insertAfter(element.parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            submitHandler: function(form){
+                var $form = $(form);
+                var validator = this;
+                $.ajax({
+                    url: $form.attr("action"),
+                    type: $form.attr("method"),
+                    dataType: "JSON",
+                    data: $form.serialize(),
+                    success: function(response){
+                        if(response.code){
+                            location.href = response["url"];
+                        }else{
+                            var data = response["data"];
+                            if(typeof(data['errors']) == "undefined"){
+                                alert(response["msg"]);
+                            }else{
+                                validator.showErrors(data['errors']);
+                                $('img#img_captcha').click();
+                            }
+                        }
+                    }, error: function () {
+                        $('input#captcha').val('');
+                        $('img#img_captcha').click();
+                        alert("数据执行错误！");
+                    }
+                });
+            }
+        });
+    });
+</script>
+{/block}

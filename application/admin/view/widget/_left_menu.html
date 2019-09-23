@@ -1,0 +1,43 @@
+<div id="sidebar" class="sidebar responsive ace-save-state">
+  <script type="text/javascript">
+    try {
+      ace.settings.loadState('sidebar')
+    } catch (e) {
+
+    }
+  </script>
+  <?php $current_ancestor_ids = (!empty($current_rule) && !empty($current_rule['ancestor_ids'])) ? $current_rule['ancestor_ids'] : [] ?>
+  <ul class="nav nav-list">
+    {volist name="menu_tree" id="v"}
+      <li class="{$v|left_menu_item_class=$current_ancestor_ids,###}">
+        <a href="{empty name='v.route_name'}#{else/}{:url('['.$v['route_name'].']')}{/empty}" {notempty name="v.children"}class="dropdown-toggle"{/notempty} >
+          <i class="{$v.icon}"></i>
+          <span class="menu-text">
+            {$v.title|default=''}
+          </span>
+          {notempty name="v.children"}
+            <b class="arrow fa fa-angle-down"></b>
+          {/notempty}
+        </a>
+        <b class="arrow"></b>
+        {notempty name="v.children"}
+          <ul class="submenu">
+            {volist name="v.children" id="vv"}
+              <li class="{$vv|left_menu_item_class=$current_ancestor_ids,###}">
+                <a href="{:url('['.$vv['route_name'].']')}">
+                  <i class="{$vv.icon|default=''}"></i>
+                  {$vv.title|default=''}
+                </a>
+                <b class="arrow"></b>
+              </li>
+            {/volist}
+          </ul>
+        {/notempty}
+      </li>
+    {/volist}
+  </ul>
+
+  <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+  </div>
+</div>

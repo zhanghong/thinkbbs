@@ -1,0 +1,12 @@
+<!--主题-->
+<?php if(!empty($current_rule)): ?>
+    <div class="page-header">
+        <h1>
+            您当前操作
+            <small>
+                <i class="ace-icon fa fa-angle-double-right"></i>
+                {$current_rule.title|default=''}
+            </small>
+        </h1>
+    </div>
+<?php endif; ?>
