@@ -1,0 +1,100 @@
+{extend name="layout:base" /}
+{block name="main_content"}
+<form class="form-horizontal adminform" id="model-form" method="post" action="{:url('[admin.auth.adminer.update]', ['id' => $adminer->id])}" >
+    <input type="hidden" name="_method" value="PUT">
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">
+            登录账号<span class="red">*</span>
+        </label>
+        <div class="col-sm-10">
+            <input type="text" name="name" placeholder="请输入登录账号" class="col-xs-10 col-sm-5" value="{$adminer->name}" autocomplete="off" />
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">
+            角色组
+        </label>
+        <div class="col-sm-10">
+            <select name="role_id"  class="col-sm-5">
+                <option value="0">请选择</option>
+                {volist name="roles" id="vo"}
+                    <option value="{$vo.id}" <?php if($role_id==$vo['id']){ echo('selected="selected"'); } ?>>{$vo.title}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">
+            登录密码：
+        </label>
+        <div class="col-sm-10">
+            <input type="password" id="password" name="password" placeholder="请输入用户的登录密码" class="col-xs-10 col-sm-5" value="" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right">
+            确认密码：
+        </label>
+        <div class="col-sm-10">
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="请再次输入登录密码" class="col-xs-10 col-sm-5" value="" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>重置
+            </button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name="page_js"}
+<script src="__TPADMIN_ASSETS__/plugins/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        validAndSubmitForm(
+            "form#model-form",
+            {
+                "name":{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },"password":{
+                    minlength: 6,
+                    maxlength: 20
+                },"password_confirm":{
+                    equalTo: "#password"
+                }
+            },{
+                "name":{
+                    required: "用户名不能为空",
+                    minlength: "用户名长度必须在3-20个字符之间",
+                    maxlength: "用户名长度必须在3-20个字符之间"
+                },"role_id":{
+                    required: "角色组不能为空"
+                },"password":{
+                    minlength: "登录密码长度必须在6-20之间",
+                    maxlength: "登录密码长度必须在6-20之间"
+                },"password_confirm":{
+                    minlength: "确认密码长度必须在6-20之间",
+                    maxlength: "确认密码长度必须在6-20之间",
+                    equalTo: "两次输入的密码一致"
+                }
+            }
+        );
+    });
+</script>
+{/block}

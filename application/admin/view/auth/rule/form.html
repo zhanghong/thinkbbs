@@ -1,0 +1,137 @@
+{extend name="layout:base" /}
+{block name="main_content"}
+<?php if(isset($rule['id'])): ?>
+<form class="form-horizontal adminform" id="model-form" method="post" action="{:url('[admin.auth.rule.edit]', ['id' => $rule.id])}">
+    <input type="hidden" name="_method" value="PUT">
+<?php else: ?>
+<form class="form-horizontal adminform" id="model-form" method="post" action="{:url('[admin.auth.rule.save]')}">
+<?php endif; ?>
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+            上级菜单：
+        </label>
+        <div class="col-sm-10">
+            <select name="parent_id"  class="col-sm-5" required>
+                <option value="0">顶级菜单</option>
+                {volist name="parent_rules" id="vo"}
+                    <?php if($vo['depth'] < 2 && (!isset($rule['id']) || $vo['id'] != $rule['id'])): ?>
+                        <option value="{$vo.id}" <?php if(isset($rule['parent_id']) && $rule['parent_id']==$vo['id']){ echo('selected="selected"'); } ?>>{$vo.depth}{$vo.prefix}{$vo.title}</option>
+                    <?php endif; ?>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+            菜单标题：<span class="red">*</span>
+        </label>
+        <div class="col-sm-10">
+            <input type="text" name="title" placeholder="例：添加管理员" class="col-xs-10 col-sm-5" value="{$rule.title|default=''}" required/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+            页面名称：<span class="red">*</span>
+        </label>
+        <div class="col-sm-10">
+            <input type="text" name="name" placeholder="例：auth/adminer/create" class="col-xs-10 col-sm-5" value="{$rule.name|default=''}" required/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">路由名称：</label>
+        <div class="col-sm-10">
+            <input type="text" name="route_name" placeholder="例：admin.auth.adminer.create" class="col-xs-10 col-sm-5" value="{$rule.route_name|default=''}"/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> ICON图标：</label>
+        <div class="col-sm-10">
+            <input type="text" name="icon" placeholder="例：fa fa-tachometer" value="{$rule.icon|default=''}" class="col-xs-10 col-sm-5"/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">显示状态：</label>
+        <div class="col-sm-10" style="padding-top:5px;">
+            <input name="status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <?php if(isset($rule['status']) && intval($rule['status'])){ echo('checked="checked"'); } ?> />
+            <span class="lbl"></span>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">排序编号：</label>
+        <div class="col-sm-10">
+            <input type="text" name="sort_num" maxlength="4" placeholder="编号越小越靠前" value="{$rule.sort_num|default='0'}" class="col-xs-10 col-sm-5"/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>重置
+            </button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name="page_js"}
+<script src="__TPADMIN_ASSETS__/plugins/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($){
+        validAndSubmitForm(
+            "form#model-form",
+            {
+                "title":{
+                    required: true,
+                    minlength: 2,
+                    maxlength: 10
+                }, "name":{
+                    required: true,
+                    minlength: 1,
+                    maxlength: 50
+                }, "route_name":{
+                    maxlength: 50
+                }, "icon":{
+                    maxlength: 50
+                }, "sort_num":{
+                    min: 0,
+                    max: 9999
+                }
+            },{
+                "title":{
+                    required: "菜单标题不能为空",
+                    minlength: "菜单标题不能少于2个字符",
+                    maxlength: "菜单标题不能超过10个字符"
+                }, "name":{
+                    required: "页面名称不能为空",
+                    minlength: "页面名称不能少于1个字符",
+                    maxlength: "页面名称不能超过50个字符"
+                }, "route_name":{
+                    maxlength: "路由名称不能超过50个字符"
+                }, "icon":{
+                    maxlength: "ICON图标不能超过30个字符"
+                }, "sort_num":{
+                    min: "排序编号不能小于0",
+                    max: "排序编号不能大于9999"
+                }
+            }
+        );
+    });
+</script>
+{/block}
