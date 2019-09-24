@@ -2,6 +2,9 @@
 
 namespace app\common\model;
 
+use app\common\validate\Avatar as AvatarValidate;
+use app\common\exception\ValidateException;
+
 class Upload
 {
    /**
@@ -12,6 +15,13 @@ class Upload
     * @return   array
     */
     static public function saveImage($file){
+        $validate = new AvatarValidate;
+        if(!$validate->batch(true)->check(['file' => $file])){
+            $e = new ValidateException('上传图片失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
         // 所有上传文件都保存在项目 public/upload 目录里
         $local_dir = 'uploads';
         $ds = DIRECTORY_SEPARATOR;
