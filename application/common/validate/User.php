@@ -56,4 +56,9 @@ class User extends Validate
         }
         return true;
     }
+
+    protected $scene = [
+        'form_register'  =>  ['name', 'mobile', 'password', 'password_confirmation', 'sms_code'],
+        'reset_password'  =>  ['sms_code', 'password', 'password_confirmation'],
+    ];
 }

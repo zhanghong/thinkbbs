@@ -1,21 +1,15 @@
 {extend name="layout/main" /}
 {block name="content"}
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-header">用户注册</div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    重置密码
+                </div>
 
                 <div class="card-body">
-                    <form id="model-form" class="needs-validation" novalidate method="POST" action="{:url('[page.signup.save]')}">
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">用户名</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" required autofocus>
-                            </div>
-                        </div>
-
+                    <form id="model-form" class="needs-validation" novalidate method="POST" action="{:url('[page.reset.save]')}">
                         <div class="form-group row">
                             <label for="mobile" class="col-md-4 col-form-label text-md-right">手机号码</label>
 
@@ -58,13 +52,13 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    注册 <i class="glyphicon glyphicon-arrow-right"></i>
+                                    提交 <i class="glyphicon glyphicon-arrow-right"></i>
                                 </button>
                                 <a class="btn btn-link" href="{:url('[page.login]')}">
                                     账号登录
                                 </a>
-                                <a class="btn btn-link" href="{:url('[page.reset]')}">
-                                    忘记密码
+                                <a class="btn btn-link" href="{:url('[page.signup]')}">
+                                    立即注册
                                 </a>
                             </div>
                         </div>
@@ -117,7 +111,7 @@
             }
             if($btnCurrent.hasClass("btn-primary")){
                 $.ajax({
-                    url: "{:url('[signup.send_code]')}",
+                    url: "{:url('[reset.send_code]')}",
                     type: "POST",
                     dataType: "JSON",
                     data: {"mobile": mobile},
@@ -138,22 +132,12 @@
         validAndSubmitForm(
             "form#model-form",
             {
-                "name":{
-                    required: true,
-                    rangelength: [2, 20]
-                }, "mobile":{
+                "mobile":{
                     required: true,
                     range: [13000000000, 19900000000],
                     remote: {
-                        url: "{:url('[signup.check_unique]')}",
-                        type: "post",
-                        data: {
-                            field: "mobile",
-                            id: 0,
-                            mobile: function(){
-                                return $("input#mobile").val();
-                            }
-                        }
+                        url: "{:url('[reset.mobile_present]')}",
+                        type: "post"
                     }
                 }, "sms_code":{
                     required: true,
@@ -176,16 +160,13 @@
                     equalTo: "#password"
                 }
             }, {
-                "name":{
-                    required: "用户名不能为空",
-                    rangelength: "用户名长度必须在2-20个字符之间"
-                }, "mobile":{
+                "mobile":{
                     required: "手机号码不能为空",
                     range: "手机号码格式不正确",
-                    remote: "当前手机号码已注册"
+                    remote: "注册手机号码不在存"
                 }, "sms_code":{
                     required: "短信验证码不正确",
-                    rangelength: "短信验证码不正确",
+                    range: "短信验证码不正确",
                     remote: "短信验证码不正确"
                 }, "password":{
                     required: "登录密码不能为空",
