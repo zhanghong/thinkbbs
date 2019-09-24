@@ -48,3 +48,19 @@ function asset_path($file_path)
     }
     return $file_path.'?c='.$file_time;
 }
+
+/**
+ * 上传单张图片--返回的是Upload Image Path
+ * @Author   zhanghong
+ * @DateTime 2019-02-18
+ * @param    string     $backcall 回调字段名
+ * @param    integer    $width    图片高度
+ * @param    integer    $height   图片宽度
+ * @param    string     $image    当前图片路径
+ * @param    string     $upload_type    上传文件类型
+ */
+function create_upload_image($backcall="image", $width=100, $height=100, $image="")
+{
+    echo '<iframe scrolling="no" frameborder="0" border="0" onload="this.height=this.contentWindow.document.body.scrollHeight;this.width=this.contentWindow.document.body.scrollWidth;" width='.$width.' height="'.$height.'"  src="'.url('[upload.create]').'?width='.$width.'&height='.$height.'&backcall='.$backcall.'&image='.$image.'"></iframe>
+         <input type="hidden" name="'.$backcall.'" id="'.$backcall.'">';
+}
