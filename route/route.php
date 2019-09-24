@@ -26,4 +26,6 @@ Route::get('reset', 'reset/create')->name('page.reset');
 Route::post('reset', 'reset/save')->name('page.reset.save');
 
 // 个人中心
+Route::get('user/edit', 'user/edit')->name('user.edit');
+Route::put('user/update', 'user/update')->name('user.update');
 Route::get('user/<id>', 'user/read')->name('user.read');
