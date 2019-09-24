@@ -189,4 +189,32 @@ class User extends Model
     {
         return password_hash($value, PASSWORD_DEFAULT);
     }
+
+    /**
+     * 更新个人资料
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-17
+     * @param    array              $data 更新数据
+     * @return   boolean                  [description]
+     */
+    public function updateProfile($data)
+    {
+        $validate = new Validate;
+        if(!$validate->batch(true)->scene('update_profile')->check($data)){
+            $e = new ValidateException('更新个人信息失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        $is_save = $this->allowField(['name', 'introduction'])->save($data, ['id' => $this->id]);
+        if(!$is_save){
+            throw new \Exception('更新个人信息失败');
+        }
+
+        $user = $this->find($this->id);
+        unset($user['password']);
+        Session::set(self::CURRENT_KEY, $user);
+
+        return true;
+    }
 }

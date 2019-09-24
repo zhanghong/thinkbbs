@@ -1,0 +1,59 @@
+{extend name="layout/main" /}
+{block name="content"}
+<div class="container">
+    <div class="col-md-8 offset-md-2">
+
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    <i class="glyphicon glyphicon-edit"></i> 编辑个人资料
+                </h4>
+            </div>
+
+            <div class="card-body">
+
+                <form id="model-form" class="needs-validation" novalidate action="{:url('[user.update]')}" method="POST" accept-charset="UTF-8">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <div class="form-group">
+                        <label for="name-field">用户名</label>
+                        <input class="form-control" type="text" name="name" id="name-field" value="{$user->name}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="introduction-field">个人简介</label>
+                        <textarea name="introduction" id="introduction-field" class="form-control" rows="3">{$user->introduction|default=''}</textarea>
+                    </div>
+                    <div class="well well-sm">
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="scripts"}
+{js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
+<script type="text/javascript">
+    jQuery(function($){
+        validAndSubmitForm(
+            "form#model-form",
+            {
+                "name":{
+                    required: true,
+                    rangelength: [6, 20]
+                }, "introduction":{
+                    maxlength: 100
+                }
+            }, {
+                "name":{
+                    required: "用户名不能为空",
+                    rangelength: "用户名长度必须在2-20个字符之间"
+                }, "introduction":{
+                    maxlength: "个人介绍信息不能超过100个字符"
+                }
+            }
+        );
+    });
+</script>
+{/block}
