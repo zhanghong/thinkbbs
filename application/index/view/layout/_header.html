@@ -23,11 +23,11 @@
                 {else/}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="https://en.gravatar.com/userimage/122970844/fdcc50b9772ee6ef52d79e3f35a149cf?size=512" class="img-responsive img-circle" width="30px" height="30px">
+                            <img src="http://pybgwzz42.bkt.clouddn.com/avatars/male_6.png" class="img-responsive img-circle" width="30px" height="30px">
                             {$current_user.name}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{:url('[user.read]', ['id' => $current_user->id])}">
                             <i class="far fa-user mr-2"></i>
                             个人中心
                         </a>
