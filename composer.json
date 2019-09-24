@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.6.0",
         "topthink/framework": "5.1.*",
-        "zhanghong/tpadmin": "1.0.*"
+        "zhanghong/tpadmin": "1.0.*",
+        "overtrue/easy-sms": "^1.1"
     },
     "autoload": {
         "psr-4": {
