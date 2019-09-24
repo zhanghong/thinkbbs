@@ -217,4 +217,18 @@ class User extends Model
 
         return true;
     }
+
+    /**
+     * 用户头像路径
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-19
+     * @return   [type]             [description]
+     */
+    public function getAvatarPathAttr()
+    {
+        if(empty($this->avatar)){
+            return '/static/assets/index/images/default_avatar.png';
+        }
+        return $this->avatar;
+    }
 }
