@@ -3,6 +3,8 @@
 namespace app\common\model;
 
 use think\Model;
+use app\common\validate\User as Validate;
+use app\common\exception\ValidateException;
 
 class User extends Model
 {
@@ -40,5 +42,42 @@ class User extends Model
         }
 
         return true;
+    }
+
+    /**
+     * 注册新用户
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-10
+     * @param    array              $data 表单提交数据
+     * @return   User                     新注册用户信息
+     */
+    public static function register($data)
+    {
+        $validate = new Validate;
+        if(!$validate->batch(true)->check($data)){
+            $e = new ValidateException('注册数据验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        try{
+            $user = new self;
+            $user->allowField(true)->save($data);
+        }catch (\Exception $e){
+            throw new \Exception('创建用户失败');
+        }
+
+        return $user;
+    }
+
+    /**
+     * 密码保存时进行加密
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-10
+     * @param    string             $value 原始密码
+     */
+    public function setPasswordAttr($value)
+    {
+        return password_hash($value, PASSWORD_DEFAULT);
     }
 }

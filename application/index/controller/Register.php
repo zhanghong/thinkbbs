@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use think\Request;
 use app\common\model\User;
+use app\common\exception\ValidateException;
 
 class Register extends Base
 {
@@ -14,13 +15,17 @@ class Register extends Base
 
     public function save(Request $request)
     {
-        // 实例化一个User对象
-        $user = new User;
-        // 保存表单提交数据
-        $user->save($request->post());
-        $message = '注册成功';
-        // 注册成功后跳转到注册表单页面
-        $this->success($message, url('create'));
+        $param = $request->post();
+        try{
+            $user = User::register($param);
+        }catch (ValidateException $e){
+            $this->assign('user', $param);
+            $this->assign('errors', $e->getData());
+            return $this->fetch('create');
+        }catch (\Exception $e){
+            $this->error($e->getMessage());
+        }
+        $this->success('注册成功', url('[page.root]'));
     }
 
     /**
