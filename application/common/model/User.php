@@ -52,13 +52,14 @@ class User extends Model
      * 注册新用户
      * @Author   zhanghong(Laifuzi)
      * @DateTime 2019-06-10
-     * @param    array              $data 表单提交数据
+     * @param    array              $data  表单提交数据
+     * @param    string             $scene 验证场景名
      * @return   User                     新注册用户信息
      */
-    public static function register($data)
+    public static function register($data, $scene = 'form_register')
     {
         $validate = new Validate;
-        if(!$validate->scene('form_register')->batch(true)->check($data)){
+        if(!$validate->scene($scene)->batch(true)->check($data)){
             $e = new ValidateException('注册数据验证失败');
             $e->setData($validate->getError());
             throw $e;
