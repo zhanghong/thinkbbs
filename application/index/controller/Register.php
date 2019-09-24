@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use think\Request;
+use think\facade\Session;
 use app\common\model\Sms;
 use app\common\model\User;
 use app\common\exception\ValidateException;
@@ -16,17 +17,25 @@ class Register extends Base
 
     public function save(Request $request)
     {
+        if(!$request->isAjax()){
+            $this->redirect('[page.signup]');
+        }else if(!$request->isPost()){
+            $this->error('访问页面不存在');
+        }
+
         $param = $request->post();
         try{
             $user = User::register($param);
         }catch (ValidateException $e){
-            $this->assign('user', $param);
-            $this->assign('errors', $e->getData());
-            return $this->fetch('create');
+            $this->error('验证失败', '', ['errors' => $e->getData()]);
         }catch (\Exception $e){
             $this->error($e->getMessage());
         }
-        $this->success('注册成功', url('[page.root]'));
+
+        $message = '注册成功';
+        // 在调用 success 返回前把提示消息写入 session 里
+        Session::flash('success', $message);
+        $this->success($message, url('[page.root]'));
     }
 
     /**
