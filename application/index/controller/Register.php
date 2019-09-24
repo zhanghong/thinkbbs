@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use think\Request;
+use app\common\model\Sms;
 use app\common\model\User;
 use app\common\exception\ValidateException;
 
@@ -46,5 +47,37 @@ class Register extends Base
         }else{
             echo("false");
         }
+    }
+
+    /**
+     * 发送注册验证码
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-24
+     */
+    public function send_code(Request $request)
+    {
+        if(!$request->isAjax()){
+            $this->redirect('[page.signup]');
+        }else if(!$request->isPost()){
+            $this->error('访问页面不存在');
+        }
+
+        $mobile = $request->post('mobile');
+        if(empty($mobile)){
+            $this->error('注册手机号码不能为空');
+        }
+        $param = ['name' => 'mobile', 'mobile' => $mobile];
+        if(User::checkFieldUnique($param)){
+            $this->error('手机号码已注册');
+        }
+
+        try {
+            $sms = new Sms();
+            $sms->sendCode($mobile);
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
+
+        $this->success('验证码发送成功');
     }
 }
