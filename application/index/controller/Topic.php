@@ -9,7 +9,7 @@ class Topic extends Base
 {
     public function index()
     {
-        $paginate = TopicModel::paginate(20);
+        $paginate = TopicModel::minePaginate();
         $this->assign('paginate', $paginate);
 
         return $this->fetch('index');
