@@ -9,6 +9,10 @@ use app\common\exception\ValidateException;
 
 class User extends Base
 {
+    protected $middleware = [
+        'auth' => ['except' => ['read']],
+    ];
+
     public function read($id)
     {
         $user = UserModel::find(intval($id));
