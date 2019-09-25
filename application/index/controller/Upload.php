@@ -34,7 +34,7 @@ class Upload extends Base
         if($request->isPost()){
             $file = $request->file('image');
             try{
-                $upload_info = UploadModel::saveImage($file);
+                $upload_info = UploadModel::saveImage($file, 416);
                 $image = $upload_info['save_path'];
             }catch(ValidateException $e){
                 $errors = $e->getData();
