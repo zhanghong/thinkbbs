@@ -49,3 +49,36 @@ body {
 .footer .container p a {
   color: inherit;
 }
+
+/* Topic Index Page */
+
+.topic-index-page .topic-list .nav > li > a{
+  position: relative;
+  display: block;
+  padding: 5px 14px;
+  font-size: 0.9em;
+}
+
+.topic-index-page .topic-list a{
+  color: #444444;
+}
+
+.topic-index-page .topic-list .meta{
+  font-size: 0.9em;
+  color: #b3b3b3;
+}
+
+.topic-index-page .topic-list .meta a{
+  color: #b3b3b3;
+}
+
+.topic-index-page .topic-list .badge{
+  background-color: #d8d8d8;
+}
+
+.topic-index-page .topic-list hr{
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border: 0;
+  border-top: 1px solid #dcebf5;
+}
