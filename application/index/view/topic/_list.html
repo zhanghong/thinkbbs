@@ -12,10 +12,10 @@
                 <div class="media-body">
 
                     <div class="media-heading mt-0 mb-1">
-                        <a href="#">
+                        <a href="{:url('[topic.read]', ['id' => $topic->id])}">
                             {$topic->title}
                         </a>
-                        <a class="float-right" href="#">
+                        <a class="float-right" href="{:url('[topic.read]', ['id' => $topic->id])}">
                             <span class="badge badge-secondary badge-pill">
                                 {$topic->reply_count}
                             </span>

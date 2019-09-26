@@ -2,7 +2,7 @@
     <ul class="list-group mt-4 border-0">
         {volist name="$topic_paginate->all()" id="topic"}
             <li class="list-group-item pl-2 pr-2 border-right-0 border-left-0 <? if($key==0){ echo('border-top-0'); } ?>">
-                <a href="#">
+                <a href="{:url('[topic.read]', ['id' => $topic->id])}">
                     {$topic->title}
                 </a>
                 <span class="meta float-right text-secondary">

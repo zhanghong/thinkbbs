@@ -10,7 +10,7 @@ use app\common\exception\ValidateException;
 class Topic extends Base
 {
     protected $middleware = [
-        'auth' => ['except' => ['index']],
+        'auth' => ['except' => ['index', 'read']],
     ];
 
     public function index(Request $request)
@@ -45,12 +45,31 @@ class Topic extends Base
             $this->error($e->getMessage());
         }
 
-        $this->success('创建成功', url('[topic.index]'));
+        $this->success('创建成功', url('[topic.read]', ['id' => $topic->id]));
     }
 
     public function read($id)
     {
-        //
+        // 关联创建话题用户信息查询
+        $topic = TopicModel::with(['user' => function($query){
+            $query->field('id, name, avatar');
+        }])->find($id);
+
+        if(empty($topic)){
+            $this->redirect('[topic.index]');
+        }
+
+        // 浏览次数加 1
+        $topic->view_count += 1;
+        $topic->save();
+
+        $this->assign('topic', $topic);
+
+        // 用话题的摘要信息覆盖已有的SEO信息
+        $this->site['description'] = $topic->excerpt;
+        $this->assign('site', $this->site);
+
+        return $this->fetch('read');
     }
 
     public function edit($id)

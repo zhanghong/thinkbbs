@@ -14,8 +14,8 @@ class Base extends Controller
     {
         if(!request()->isAjax()){
             // 读取站点设置信息
-            $site = ConfigModel::siteSetting();
-            $this->assign('site', $site);
+            $this->site = ConfigModel::siteSetting();
+            $this->assign('site', $this->site);
 
             // 页面提示信息
             $flash = [];
