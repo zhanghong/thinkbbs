@@ -6,6 +6,7 @@ use think\Controller;
 use think\facade\Session;
 use app\common\model\User as UserModel;
 use app\common\model\Config as ConfigModel;
+use app\common\model\Category as CategoryModel;
 
 class Base extends Controller
 {
@@ -25,6 +26,9 @@ class Base extends Controller
                 }
             }
             $this->assign('flash', $flash);
+
+            $categories = CategoryModel::order('id', 'ASC')->all();
+            $this->assign('categories', $categories);
         }
 
         // 当前登录用户
