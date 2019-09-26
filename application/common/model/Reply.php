@@ -76,4 +76,31 @@ class Reply extends Model
 
         return $reply;
     }
+
+    /**
+     * 是否可以删除回复
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-25
+     * @return   boolean             [description]
+     */
+    public function canDelete()
+    {
+        $current_user = User::currentUser();
+        if(empty($current_user)){
+            return false;
+        }
+
+        if($current_user->isAuthorOf($this)){
+            return true;
+        }
+
+        $topic = $this->topic;
+        if(empty($topic)){
+            return false;
+        }else if($current_user->isAuthorOf($topic)){
+            return true;
+        }
+
+        return false;
+    }
 }

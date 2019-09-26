@@ -2,6 +2,7 @@
 
 namespace app\common\observer;
 
+use think\Db;
 use think\helper\Str;
 use app\common\model\Topic as TopicModel;
 use app\common\model\User as UserModel;
@@ -38,5 +39,12 @@ class Topic
     {
         $excerpt = trim(preg_replace('/\r\n|\r|\n+/', ' ', strip_tags($value)));
         return Str::substr($value, 0, $length);
+    }
+
+    public function afterDelete(TopicModel $topic)
+    {
+        // 这里不要使用 Model 删除方法，否则会出现监听事件循环调用
+        // Db::name接收的参数「表名」，不用包含数据库表名辍
+        Db::name('reply')->where('topic_id', $topic->id)->delete();
     }
 }
