@@ -8,7 +8,7 @@
  * @return   null                            [description]
  */
 function validAndSubmitForm(nameSelector, rules, messages){
-    $form = $(nameSelector);
+    var $form = $(nameSelector);
     if(!$form.length){
         return false;
     }
