@@ -1,6 +1,13 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
   font-size: 14px;
+  background: #f0f2f5!important;
+  margin-bottom: 100px;
 }
 
 /* header */
@@ -16,16 +23,6 @@ body {
 }
 
 /* Sticky footer styles */
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 
 .footer {
   position: absolute;
