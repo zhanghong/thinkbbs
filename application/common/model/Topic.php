@@ -3,9 +3,13 @@
 namespace app\common\model;
 
 use think\Model;
+use app\common\validate\Topic as Validate;
 
 class Topic extends Model
 {
+    // 新增实例记录时自动完成user_id字段赋值
+    protected $insert = ['user_id'];
+
     // belongs to user
     public function user()
     {
@@ -96,5 +100,45 @@ class Topic extends Model
         }
 
         return $static->paginate($per_page);
+    }
+
+    /**
+     * user_id属性修改器
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-21
+     */
+    protected function setUserIdAttr(){
+        // 当前登录用户ID
+        $current_user = User::currentUser();
+        if(empty($current_user)){
+            return 0;
+        }
+        return $current_user->id;
+    }
+
+    /**
+     * 创建记录
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-21
+     * @param    array              $data 表单提交数据
+     * @return   Topic                    [description]
+     */
+    public static function createItem($data)
+    {
+        $validate = new Validate;
+        if(!$validate->batch(true)->check($data)){
+            $e = new ValidateException('数据验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        try{
+            $topic = new self;
+            $topic->allowField(['title', 'category_id', 'body'])->save($data);
+        }catch (\Exception $e){
+            throw new \Exception('创建话题失败');
+        }
+
+        return $topic;
     }
 }
