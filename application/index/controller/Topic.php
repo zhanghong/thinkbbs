@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use think\Request;
+use think\facade\Session;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Category as CategoryModel;
 use app\common\exception\ValidateException;
@@ -123,6 +124,18 @@ class Topic extends Base
 
     public function delete($id)
     {
-        //
+        $topic = TopicModel::find($id);
+
+        if(empty($topic)){
+            $this->error('删除话题不存在', '[topic.index]');
+        }else if(!$topic->canDelete()){
+            $this->error('对不起，您没有权限删除该话题', '[topic.index]');
+        }
+
+        $topic->delete();
+
+        $message = '删除成功';
+        Session::set('success', $message);
+        $this->success($message, '[topic.index]');
     }
 }

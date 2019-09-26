@@ -234,4 +234,20 @@ class User extends Model
         }
         return $this->avatar;
     }
+
+    /**
+     * 是否是实例对象的作者
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-19
+     * @param    Object             $item 实例对象
+     * @return   boolean                  [description]
+     */
+    public function isAuthorOf($item)
+    {
+        if($this->id == $item->user_id){
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -42,5 +42,6 @@ Route::post('topic', 'topic/save')->name('topic.save');
 Route::get('topic/<id>/edit', 'topic/edit')->name('topic.edit');
 Route::put('topic/<id>', 'topic/update')->name('topic.update');
 Route::get('topic/<id>', 'topic/read')->name('topic.read');
+Route::delete('topic/<id>', 'topic/delete')->name('topic.delete');
 Route::get('topic', 'topic/index')->name('topic.index');
 Route::get('category/<id>', 'category/read')->name('category.read');

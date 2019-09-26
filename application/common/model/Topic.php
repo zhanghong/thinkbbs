@@ -142,7 +142,7 @@ class Topic extends Model
         $current_user = User::currentUser();
         if(empty($current_user)){
             return false;
-        }else if($this->user_id != $current_user->id){
+        }else if(!$current_user->isAuthorOf($this)){
             return false;
         }
         return true;
@@ -168,5 +168,21 @@ class Topic extends Model
 
         $this->allowField(['title', 'category_id', 'body', 'excerpt'])->save($data, ['id' => $this->id]);
         return $this;
+    }
+
+    /**
+     * 登录用户是否可以删除记录
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-21
+     * @return   [type]             [description]
+     */
+    public function canDelete(){
+        $current_user = User::currentUser();
+        if(empty($current_user)){
+            return false;
+        }else if(!$current_user->isAuthorOf($this)){
+            return false;
+        }
+        return true;
     }
 }
