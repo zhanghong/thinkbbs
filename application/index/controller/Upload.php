@@ -34,7 +34,7 @@ class Upload extends Base
         if($request->isPost()){
             $file = $request->file('image');
             try{
-                $upload_info = UploadModel::saveImage($file, 416);
+                $upload_info = UploadModel::saveImage($file, UploadModel::TYPE_AVATAR, UploadModel::MAX_WIDTH_AVATAR);
                 $image = $upload_info['save_path'];
             }catch(ValidateException $e){
                 $errors = $e->getData();
@@ -49,5 +49,28 @@ class Upload extends Base
         $this->assign('image', $image);
         $this->assign("error_msg", $error_msg);
         return $this->fetch('create');
+    }
+
+    public function simditor(Request $request)
+    {
+        $file = $this->request->file('upfile');
+        try{
+            // 正文图片宽度压缩到 1024px
+            $upload_info = UploadModel::saveImage($file, UploadModel::TYPE_CONTENT, UploadModel::MAX_WIDTH_CONTENT);
+            $data = [
+                'status' => true,
+                'msg' => '上传成功',
+                'file_path' => $upload_info['save_path'],
+            ];
+        }catch(\Expection $e){
+            $data = [
+                'status' => false,
+                'msg' => $e->getMessage(),
+            ];
+        }
+
+        // 变量$data值已经是Simditor编辑器需要返回的格式了
+        // 所以直接调用json()方法返回该数据
+        return json($data);
     }
 }

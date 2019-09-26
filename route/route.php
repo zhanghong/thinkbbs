@@ -32,6 +32,7 @@ Route::get('user/<id>', 'user/read')->name('user.read');
 
 
 // 上传图片
+Route::post('upload/simditor', 'upload/simditor')->name('upload.simditor');
 Route::get('upload', 'upload/create')->name('upload.create');
 Route::post('upload', 'upload/save')->name('upload.save');
 
