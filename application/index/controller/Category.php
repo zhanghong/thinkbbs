@@ -18,9 +18,8 @@ class Category extends Base
         }
         $this->assign('category', $category);
 
-        $param = [
-            'category_id' => $category->id,
-        ];
+        $param = $request->only(['order'], 'get');
+        $param['category_id'] = $category->id;
         $paginate = TopicModel::minePaginate($param);
         $this->assign('paginate', $paginate);
 
