@@ -3,9 +3,16 @@
 namespace app\common\model;
 
 use think\Model;
+use app\common\validate\Reply as Validate;
+use app\common\exception\ValidateException;
 
 class Reply extends Model
 {
+    protected static function init()
+    {
+        self::observe(\app\common\observer\Reply::class);
+    }
+
     // belongs to user
     public function user()
     {
@@ -42,5 +49,31 @@ class Reply extends Model
             }
         }
         return $static->paginate($per_page);
+    }
+
+    /**
+     * 创建回复
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-25
+     * @param    array              $data 表单提交数据
+     * @return   Reply                    [description]
+     */
+    public static function createItem($data)
+    {
+        $validate = new Validate;
+        if(!$validate->batch(true)->check($data)){
+            $e = new ValidateException('数据验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        try{
+            $reply = new self;
+            $reply->allowField(true)->save($data);
+        }catch (\Exception $e){
+            throw new \Exception('创建回复失败');
+        }
+
+        return $reply;
     }
 }
