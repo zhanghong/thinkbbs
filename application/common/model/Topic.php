@@ -88,6 +88,7 @@ class Topic extends Model
                 continue;
             }
             switch ($name) {
+                case 'user_id':
                 case 'category_id':
                     $static = $static->where($name, intval($value));
                     break;

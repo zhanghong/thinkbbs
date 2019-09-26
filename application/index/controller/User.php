@@ -5,6 +5,7 @@ namespace app\index\controller;
 use think\Request;
 use think\facade\Session;
 use app\common\model\User as UserModel;
+use app\common\model\Topic as TopicModel;
 use app\common\exception\ValidateException;
 
 class User extends Base
@@ -22,6 +23,10 @@ class User extends Base
         }
 
         $this->assign('user', $user);
+
+        $topic_paginate = TopicModel::minePaginate(['user_id' => $user->id], 5);
+        $this->assign('topic_paginate', $topic_paginate);
+
         return $this->fetch('read');
     }
 
