@@ -5,6 +5,7 @@ namespace app\index\controller;
 use think\Request;
 use think\facade\Session;
 use app\common\model\Topic as TopicModel;
+use app\common\model\Reply as ReplyModel;
 use app\common\model\Category as CategoryModel;
 use app\common\exception\ValidateException;
 
@@ -69,6 +70,10 @@ class Topic extends Base
         // 用话题的摘要信息覆盖已有的SEO信息
         $this->site['description'] = $topic->excerpt;
         $this->assign('site', $this->site);
+
+        // 话题回复列表
+        $reply_paginate = ReplyModel::minePaginate(['topic_id' => $topic->id]);
+        $this->assign('reply_paginate', $reply_paginate);
 
         return $this->fetch('read');
     }
