@@ -46,9 +46,11 @@
 
                 <div class="operate">
                     <hr>
-                    <a href="#" class="btn btn-default btn-xs pull-left" role="button">
-                        <i class="glyphicon glyphicon-edit"></i> 编辑
-                    </a>
+                    <?php if($topic->canUpdate()): ?>
+                        <a href="{:url('[topic.edit]', ['id' => $topic->id])}" class="btn btn-default btn-xs pull-left" role="button">
+                            <i class="glyphicon glyphicon-edit"></i> 编辑
+                        </a>
+                    <?php endif; ?>
 
                     <a href="#" class="btn btn-default btn-xs pull-left" role="button">
                         <i class="glyphicon glyphicon-trash"></i> 删除

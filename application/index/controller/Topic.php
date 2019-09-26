@@ -74,12 +74,51 @@ class Topic extends Base
 
     public function edit($id)
     {
-        //
+        $topic = TopicModel::find($id);
+
+        $message = null;
+        if(empty($topic)){
+            $message = '编辑话题不存在';
+        }else if(!$topic->canUpdate()){
+            $message = '对不起，您没有权限编辑该话题';
+        }
+
+        if(!empty($message)){
+            $this->redirect('[topic.index]');
+        }
+
+        $this->assign('topic', $topic);
+
+        $categories = CategoryModel::all();
+        $this->assign('categories', $categories);
+
+        return $this->fetch('form');
     }
 
     public function update(Request $request, $id)
     {
-        //
+        if(!$request->isAjax()){
+            $this->redirect('[topic.create]');
+        }
+
+        $topic = TopicModel::find($id);
+
+        if(empty($topic)){
+            $this->error('编辑话题不存在', '[topic.index]');
+        }else if(!$topic->canUpdate()){
+            $this->error('对不起，您没有权限编辑该话题', '[topic.index]');
+        }
+
+        try{
+            $data = $request->post();
+            $topic->updateInfo($data);
+        }catch (ValidateException $e){
+            $this->error($e->getMessage(), '', ['errors' => $e->getData()]);
+        }catch (\Exception $e){
+            $this->error($e->getMessage());
+        }
+
+        $this->success('更新成功', url('[topic.read]', ['id' => $topic->id]));
     }
 
     public function delete($id)
