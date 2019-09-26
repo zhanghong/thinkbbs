@@ -4,11 +4,15 @@ namespace app\common\model;
 
 use think\Model;
 use app\common\validate\Topic as Validate;
+use app\common\observer\Topic as Observer;
 
 class Topic extends Model
 {
-    // 新增实例记录时自动完成user_id字段赋值
-    protected $insert = ['user_id'];
+    // 注册事件观察者
+    protected static function init()
+    {
+        self::observe(Observer::class);
+    }
 
     // belongs to user
     public function user()
@@ -103,20 +107,6 @@ class Topic extends Model
     }
 
     /**
-     * user_id属性修改器
-     * @Author   zhanghong(Laifuzi)
-     * @DateTime 2019-06-21
-     */
-    protected function setUserIdAttr(){
-        // 当前登录用户ID
-        $current_user = User::currentUser();
-        if(empty($current_user)){
-            return 0;
-        }
-        return $current_user->id;
-    }
-
-    /**
      * 创建记录
      * @Author   zhanghong(Laifuzi)
      * @DateTime 2019-06-21
@@ -134,7 +124,7 @@ class Topic extends Model
 
         try{
             $topic = new self;
-            $topic->allowField(['title', 'category_id', 'body'])->save($data);
+            $topic->allowField(['title', 'category_id', 'body', 'user_id', 'excerpt'])->save($data);
         }catch (\Exception $e){
             throw new \Exception('创建话题失败');
         }
