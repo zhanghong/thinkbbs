@@ -1,4 +1,7 @@
 {extend name="layout/main" /}
+{block name="styles"}
+    {css href="/static/assets/plugins/simditor/css/simditor.css" /}
+{/block}
 {block name="content"}
 <div class="container">
     <div class="col-md-10 col-md-offset-1">
@@ -37,10 +40,18 @@
 </div>
 {/block}
 {block name="scripts"}
-<script src="/static/assets/plugins/jquery-validate/jquery.validate.min.js"></script>
-<script src="/static/assets/plugins/jquery-validate/bootstrap.validate.js"></script>
+{js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
+{js href="/static/assets/plugins/jquery-validate/bootstrap.validate.js" /}
+{js href="/static/assets/plugins/simditor/js/module.js" /}
+{js href="/static/assets/plugins/simditor/js/hotkeys.js" /}
+{js href="/static/assets/plugins/simditor/js/uploader.js" /}
+{js href="/static/assets/plugins/simditor/js/simditor.js" /}
 <script type="text/javascript">
     jQuery(function($){
+        var editor = new Simditor({
+            textarea: $('#body-field'),
+        });
+
         validAndSubmitForm(
             "form#model-form",
             {
