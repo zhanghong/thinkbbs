@@ -2,6 +2,7 @@
 
 namespace app\common\observer;
 
+use think\facade\Config;
 use app\common\model\User as UserModel;
 use app\common\model\Reply as ReplyModel;
 
@@ -18,6 +19,11 @@ class Reply
                 $reply->user_id = $current_user->id;
             }
         }
+
+        $cfg = Config::pull('purifier');
+        $config = \HTMLPurifier_HTML5Config::create($cfg);
+        $purifier = new \HTMLPurifier($config);
+        $reply->content = $purifier->purify($reply->content);
     }
 
     public function afterInsert(ReplyModel $reply)

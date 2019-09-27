@@ -4,6 +4,7 @@ namespace app\common\observer;
 
 use think\Db;
 use think\helper\Str;
+use think\facade\Config;
 use app\common\model\Topic as TopicModel;
 use app\common\model\User as UserModel;
 
@@ -24,6 +25,11 @@ class Topic
 
     public function beforeWrite(TopicModel $topic)
     {
+        $cfg = Config::pull('purifier');
+        $config = \HTMLPurifier_HTML5Config::create($cfg);
+        $purifier = new \HTMLPurifier($config);
+        $topic->body = $purifier->purify($topic->body);
+
         $topic->excerpt = $this->makeExcerpt($topic->body);
     }
 
