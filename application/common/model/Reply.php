@@ -26,6 +26,32 @@ class Reply extends Model
     }
 
     /**
+     * 后台模块搜索方法
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-25
+     * @param    array              $params    [description]
+     * @param    integer            $page_rows [description]
+     * @return   [type]                        [description]
+     */
+    public static function adminPaginate($params = [], $page_rows = 15)
+    {
+        $static = static::order('id', 'DESC');
+        $map = [];
+        foreach ($params as $name => $text) {
+            $text = trim($text);
+            switch ($name) {
+                case 'keyword':
+                    if(!empty($text)){
+                        $like_text = '%'.$text.'%';
+                        $static = $static->whereLike('content', $like_text);
+                    }
+                    break;
+            }
+        }
+        return $static->with('user,topic')->paginate($page_rows, false, ['query' => $params]);
+    }
+
+    /**
      * 自定义查询方法
      * @Author   zhanghong(Laifuzi)
      * @DateTime 2019-02-26
