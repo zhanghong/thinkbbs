@@ -3,6 +3,7 @@
 namespace app\index\controller;
 
 use think\Request;
+use app\common\model\Link as LinkModel;
 use app\common\model\User as UserModel;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Category as CategoryModel;
@@ -25,6 +26,9 @@ class Category extends Base
 
         $active_users = UserModel::getActiveUsers();
         $this->assign('active_users', $active_users);
+
+        // 资源推荐
+        $this->assign('links', LinkModel::selectAll());
 
         // 使用topic/index页面渲染输出
         return $this->fetch('topic/index');
