@@ -15,6 +15,37 @@ class User extends Model
     // 指定时间戳输入格式化类名
     public $dateFormat = '\app\common\model\dateFormat';
 
+    protected static function init()
+    {
+        self::observe(\app\common\observer\User::class);
+    }
+
+    /**
+     * 后台模块搜索方法
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-25
+     * @param    array              $params    [description]
+     * @param    integer            $page_rows [description]
+     * @return   [type]                        [description]
+     */
+    public static function adminPaginate($params = [], $page_rows = 15)
+    {
+        $static = static::order('id', 'DESC');
+        $map = [];
+        foreach ($params as $name => $text) {
+            $text = trim($text);
+            switch ($name) {
+                case 'keyword':
+                    if(!empty($text)){
+                        $like_text = '%'.$text.'%';
+                        $static = $static->whereOr([['name', 'LIKE', $like_text], ['mobile', 'LIKE', $like_text]]);
+                    }
+                    break;
+            }
+        }
+        return $static->paginate($page_rows, false, ['query' => $params]);
+    }
+
     /**
      * 验证字段值是否唯一
      * @Author   zhanghong(Laifuzi)
@@ -249,5 +280,20 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * 用户注册时间
+     * @Author   zhanghong(Laifuzi)
+     * @DateTime 2019-06-27
+     * @return   string             [description]
+     */
+    public function getSignupTimeAttr()
+    {
+        $create_time = $this->getData('create_time');
+        if(empty($create_time)){
+            return '';
+        }
+        return date('Y-m-d H:i:s', $create_time);
     }
 }
