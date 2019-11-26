@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\index\controller;
 
 use app\common\model\User;
+use app\common\exception\ValidateException;
 
 class Register extends Base
 {
@@ -20,7 +21,10 @@ class Register extends Base
 
         try {
             // 保存表单提交数据
-            $user->save($this->request->post());
+            $param = $this->request->post();
+            $user = User::register($param);
+        } catch (ValidateException $e) {
+            return $this->error($e->getMessage(), null, ['errors' => $e->getData()]);
         } catch (\Exception $e) {
             return $this->error('对不起，注册失败。');
         }
