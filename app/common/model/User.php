@@ -55,22 +55,28 @@ class User extends Model
     /**
      * 注册新用户
      * @Author   zhanghong(Laifuzi)
-     * @param    array              $data 表单提交数据
-     * @return   User                     新注册用户信息
+     * @param    array              $data  表单提交数据
+     * @param    string             $scene 验证场景名
+     * @return   User                      新注册用户信息
      */
-    public static function register(array $data): User
+    public static function register(array $data, string $scene = 'form_register'): User
     {
         $validate = new Validate;
-        if (!$validate->scene('form_register')->batch(true)->check($data)) {
+        if (!$validate->scene($scene)->batch(true)->check($data)) {
             $e = new ValidateException('注册数据验证失败');
             $e->setData($validate->getError());
             throw $e;
         }
 
-        try {
-            $user = new self;
-            $user->allowField(['name', 'mobile', 'password'])->save($data);
-        } catch (\Exception $e) {
+        $fields = ['name', 'mobile', 'password', 'avatar'];
+        if ($scene == 'seed_register') {
+            array_push($fields, 'avatar');
+        }
+
+        try{
+            $user = new static;
+            $user->allowField($fields)->save($data);
+        }catch (\Exception $e){
             throw new \Exception('创建用户失败');
         }
 
