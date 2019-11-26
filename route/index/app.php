@@ -36,3 +36,6 @@ Route::get('user/<id>', 'user/read')->name('user.read');
 // 上传图片
 Route::get('upload', 'upload/create')->name('upload.create');
 Route::post('upload', 'upload/save')->name('upload.save');
+
+// 话题管理
+Route::get('topic', 'topic/index')->name('topic.index');
