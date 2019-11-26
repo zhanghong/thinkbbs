@@ -3,6 +3,8 @@ declare (strict_types = 1);
 
 namespace app\index\controller;
 
+use think\facade\Session;
+
 use app\common\model\Sms;
 use app\common\model\User;
 use app\common\exception\ValidateException;
@@ -17,7 +19,10 @@ class Register extends Base
     public function save(User $user)
     {
         if (!$this->request->isPost() || !$this->request->isAjax()) {
-            return $this->error('对不起，你访问页面不存在。');
+            $message = '对不起，你访问页面不存在。';
+            // 在跳转前把错误提示消息写入 session 里
+            Session::flash('danger', $message);
+            return $this->error($message);
         }
 
         try {
@@ -27,11 +32,14 @@ class Register extends Base
         } catch (ValidateException $e) {
             return $this->error($e->getMessage(), null, ['errors' => $e->getData()]);
         } catch (\Exception $e) {
-            return $this->error('对不起，注册失败。');
+            return $this->error($e->getMessage());
         }
 
+        $message = '恭喜你注册成功。';
+        // 在调用 success 返回前把注册成功提示消息写入 session 里
+        Session::flash('success', $message);
         // 注册成功后跳转到首页
-        return $this->success('恭喜你注册成功。', '/');
+        return $this->success($message, '/');
     }
 
     /**

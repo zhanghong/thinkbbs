@@ -7,6 +7,7 @@ use think\App;
 use think\app\Url;
 use think\Validate;
 use think\facade\View;
+use think\facade\Session;
 use think\exception\ValidateException;
 use app\common\model\Config as ConfigModel;
 
@@ -31,6 +32,16 @@ abstract class Base
             // 读取站点设置信息
             $site = ConfigModel::siteSetting();
             View::assign('site', $site);
+
+            // 页面提示信息
+            $flash = [];
+            $flash_names = ['success', 'info', 'warning', 'danger'];
+            foreach ($flash_names as $key => $name) {
+                if (Session::has($name)) {
+                    $flash[$name] = Session::pull($name);
+                }
+            }
+            View::assign('flash', $flash);
         }
     }
 
