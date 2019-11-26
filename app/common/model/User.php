@@ -208,7 +208,7 @@ class User extends Model
             throw $e;
         }
 
-        $is_save = $this->allowField(['name', 'introduction'])->save($data);
+        $is_save = $this->allowField(['name', 'introduction', 'avatar'])->save($data);
         if (!$is_save) {
             throw new \Exception('更新个人信息失败');
         }
