@@ -14,6 +14,7 @@ class User extends Validate
         'password' => 'require|length:6,20',
         'password_confirmation' => 'require|length:6,20|confirm:password',
         'sms_code' => 'require|length:6|checkCode',
+        'introduction' => 'max:100',
     ];
 
     protected $message = [
@@ -30,12 +31,14 @@ class User extends Validate
         'sms_code.require' => '短信验证码不能为空',
         'sms_code.length' => '短信验证码不正确',
         'sms_code.filter_sms_code' => '短信验证码不正确',
+        'introduction.max' => '请输入不超过100字的个人简介',
     ];
 
     protected $scene = [
         'form_register'  =>  ['name', 'mobile', 'password', 'password_confirmation', 'sms_code'],
         'seed_register'  =>  ['name', 'mobile', 'password'],
         'reset_password'  =>  ['sms_code', 'password', 'password_confirmation'],
+        'update_profile'  =>  ['name', 'introduction'],
     ];
 
     /**

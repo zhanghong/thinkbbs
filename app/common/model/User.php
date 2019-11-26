@@ -192,4 +192,32 @@ class User extends Model
         Session::delete(self::CURRENT_KEY);
         return true;
     }
+
+    /**
+     * 更新个人资料
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $data 更新数据
+     * @return   bool
+     */
+    public function updateProfile(array $data): bool
+    {
+        $validate = new Validate;
+        if (!$validate->batch(true)->scene('update_profile')->check($data)) {
+            $e = new ValidateException('更新个人信息失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        $is_save = $this->allowField(['name', 'introduction'])->save($data);
+        if (!$is_save) {
+            throw new \Exception('更新个人信息失败');
+        }
+
+        // 刷新用户信息
+        $user = $this->refresh();
+        unset($user['password']);
+        Session::set(self::CURRENT_KEY, $user);
+
+        return true;
+    }
 }
