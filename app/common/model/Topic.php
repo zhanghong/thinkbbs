@@ -5,6 +5,7 @@ namespace app\common\model;
 
 use think\Model;
 use think\Paginator;
+use think\helper\Str;
 use app\common\validate\Topic as Validate;
 use app\common\exception\ValidateException;
 
@@ -125,11 +126,24 @@ class Topic extends Model
 
         try {
             $topic = new static;
-            $topic->allowField(['title', 'category_id', 'body', 'user_id'])->save($data);
+            $topic->allowField(['title', 'category_id', 'body', 'user_id', 'excerpt'])->save($data);
         } catch (\Exception $e) {
             throw new \Exception('创建话题失败');
         }
 
         return $topic;
+    }
+
+    /**
+     * 话题写入事件
+     * @Author   zhanghong(Laifuzi)
+     * @param    Topic              $topic 话题实例
+     * @return   bool
+     */
+    public static function onBeforeWrite(Topic $topic)
+    {
+        $excerpt = trim(preg_replace('/\r\n|\r|\n+/', ' ', strip_tags($topic->body)));
+        $topic->excerpt = Str::substr($excerpt, 0, 200);
+        return true;
     }
 }
