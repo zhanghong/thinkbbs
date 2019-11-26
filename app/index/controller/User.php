@@ -6,6 +6,7 @@ namespace app\index\controller;
 use think\facade\Session;
 use app\common\model\User as UserModel;
 use app\common\model\Topic as TopicModel;
+use app\common\model\Reply as ReplyModel;
 use app\common\exception\ValidateException;
 
 class User extends Base
@@ -24,10 +25,20 @@ class User extends Base
             return $this->redirect('/');
         }
 
-        return $this->fetch('read', [
+        $assigns = [
             'user' => $user,
-            'topic_paginate' => TopicModel::minePaginate(['user_id' => $user->id], 5),
-        ]);
+        ];
+
+        $param_tab = $this->request->param('tab');
+        if ($param_tab == 'replies') {
+            $assigns['is_replies'] = true;
+            $assigns['reply_paginate'] = ReplyModel::minePaginate(['user_id' => $user->id], 5);
+        } else {
+            $assigns['is_replies'] = false;
+            $assigns['topic_paginate'] = TopicModel::minePaginate(['user_id' => $user->id], 5);
+        }
+
+        return $this->fetch('read', $assigns);
     }
 
     public function edit()

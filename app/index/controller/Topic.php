@@ -5,6 +5,7 @@ namespace app\index\controller;
 
 use think\facade\Session;
 use app\common\model\Topic as TopicModel;
+use app\common\model\Reply as ReplyModel;
 use app\common\model\Category as CategoryModel;
 use app\common\exception\ValidateException;
 
@@ -74,6 +75,7 @@ class Topic extends Base
         return $this->fetch('topic/read', [
           'topic' => $topic,
           'site' => $this->site,
+          'reply_paginate' => ReplyModel::minePaginate(['topic_id' => $topic->id]),
         ]);
     }
 
