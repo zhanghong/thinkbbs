@@ -9,6 +9,7 @@ use think\Validate;
 use think\facade\View;
 use think\facade\Session;
 use think\exception\ValidateException;
+use app\common\model\User as UserModel;
 use app\common\model\Config as ConfigModel;
 
 abstract class Base
@@ -43,6 +44,9 @@ abstract class Base
             }
             View::assign('flash', $flash);
         }
+
+        // 当前登录用户
+        View::assign('current_user', UserModel::currentUser());
     }
 
     /**

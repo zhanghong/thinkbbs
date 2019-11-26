@@ -1,0 +1,73 @@
+{extend name="layout/main" /}
+{block name="content"}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">用户登录</div>
+
+        <div class="card-body">
+          <form id="model-form" class="needs-validation" novalidate method="POST" action="{:url('[page.login.save]')}">
+
+            <div class="form-group row">
+              <label for="email" class="col-md-4 col-form-label text-md-right">手机号码</label>
+
+              <div class="col-md-6">
+                <input id="mobile" type="mobile" class="form-control" name="mobile" value="" required autocomplete="mobile" autofocus>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="password" class="col-md-4 col-form-label text-md-right">登录密码</label>
+
+              <div class="col-md-6">
+                <input id="password" type="password" class="form-control" name="password" required>
+              </div>
+            </div>
+
+            <div class="form-group row mb-0">
+              <div class="col-md-8 offset-md-4">
+                <button type="submit" class="btn btn-primary">
+                  登录
+                </button>
+                <a class="btn btn-link" href="{:url('[page.signin]')}">
+                  立即注册
+                </a>
+                <a class="btn btn-link" href="#">
+                  忘记密码
+                </a>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{/block}
+{block name="scripts"}
+{js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
+<script type="text/javascript">
+  jQuery(function($){
+    validAndSubmitForm(
+      "form#model-form",
+      {
+        "mobile":{
+          required: true,
+          range: [13000000000, 19900000000]
+        }, "password":{
+          required: true
+        }
+      }, {
+        "mobile":{
+          required: "手机号码不能为空",
+          range: "手机号码不正确"
+        }, "password":{
+          required: "登录密码不能为空"
+        }
+      }
+      );
+  });
+</script>
+{/block}
