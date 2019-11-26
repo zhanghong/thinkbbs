@@ -32,8 +32,8 @@ abstract class Base
     {
         if (!$this->request->isAjax()) {
             // 读取站点设置信息
-            $site = ConfigModel::siteSetting();
-            View::assign('site', $site);
+            $this->site = ConfigModel::siteSetting();
+            View::assign('site', $this->site);
 
             // 页面提示信息
             $flash = [];

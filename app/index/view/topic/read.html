@@ -1,0 +1,69 @@
+{extend name="layout/main" /}
+{block name="title"}
+{$topic->title}
+{/block}
+{block name="content"}
+<div class="row">
+
+  <div class="col-lg-3 col-md-3 hidden-sm hidden-xs author-info">
+    <div class="card ">
+      <div class="card-body">
+        <div class="text-center">
+          作者：{$topic->user->name}
+        </div>
+        <hr>
+        <div class="media">
+          <div align="center">
+            <a href="{:url('[user.read]', ['id' => $topic->user_id])}">
+              <img class="thumbnail img-fluid" src="{$topic->user->avatar_path}" width="300px" height="300px">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 topic-content">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center mt-3 mb-3">
+          {$topic->title}
+        </h1>
+
+        <div class="article-meta text-center text-secondary">
+          {$topic->create_time}
+          ⋅
+          <i class="far fa-eye"></i>
+          {$topic->view_count}
+          ⋅
+          <i class="far fa-comment"></i>
+          {$topic->reply_count}
+        </div>
+
+        <div class="topic-body mt-4 mb-4">
+          {$topic->body|raw}
+        </div>
+
+        <div class="operate">
+          <hr>
+          <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
+            <i class="far fa-edit"></i> 编辑
+          </a>
+
+          <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
+            <i class="far fa-trash-alt"></i> 删除
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 用户回复列表 -->
+    <div class="card topic-reply mt-4">
+      <div class="card-body">
+
+      </div>
+    </div>
+  </div>
+</div>
+{/block}
