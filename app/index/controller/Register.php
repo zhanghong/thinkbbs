@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace app\index\controller;
 
+use app\common\model\Sms;
 use app\common\model\User;
 use app\common\exception\ValidateException;
 
@@ -50,5 +51,37 @@ class Register extends Base
         } else {
             echo 'false';
         }
+    }
+
+    /**
+     * 发送注册验证码
+     * @Author   zhanghong(Laifuzi)
+     */
+    public function send_code()
+    {
+        if (!$this->request->isAjax()) {
+            return $this->redirect('[page.signup]');
+        } else if (!$this->request->isPost()) {
+            return $this->error('对不起，你访问页面不存在。');
+        }
+
+        $mobile = $this->request->post('mobile');
+        if (empty($mobile)) {
+            return $this->error('对不起，注册手机号码不能为空。');
+        }
+        $param = ['name' => 'mobile', 'mobile' => $mobile];
+        if (User::checkFieldUnique($param)) {
+            return $this->error('对不起，你填写的手机号码已注册。');
+        }
+
+        try {
+            $sms = new Sms();
+            $sms->sendCode($mobile);
+        } catch (\Exception $e) {
+            // 捕获所有异常类，包括 NoGatewayAvailableException
+            return $this->error($e->getMessage());
+        }
+
+        return $this->success('验证码发送成功。');
     }
 }
