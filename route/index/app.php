@@ -27,3 +27,6 @@ Route::post('reset/mobile_present', 'reset/mobile_present')->name('reset.mobile_
 // 重置密码表单和保存方法
 Route::get('reset', 'reset/create')->name('page.reset');
 Route::post('reset', 'reset/save')->name('page.reset.save');
+
+// 个人中心
+Route::get('user/<id>', 'user/read')->name('user.read');
