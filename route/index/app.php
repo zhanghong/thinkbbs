@@ -41,6 +41,8 @@ Route::post('upload', 'upload/save')->name('upload.save');
 // 话题管理
 Route::get('topic/create', 'topic/create')->name('topic.create');
 Route::post('topic', 'topic/save')->name('topic.save');
+Route::get('topic/<id>/edit', 'topic/edit')->name('topic.edit');
+Route::put('topic/<id>', 'topic/update')->name('topic.update');
 Route::get('topic/<id>', 'topic/read')->name('topic.read');
 Route::get('topic', 'topic/index')->name('topic.index');
 Route::get('category/<id>', 'category/read')->name('category.read');

@@ -9,23 +9,34 @@
       <div class="card-body">
         <h2 class="">
           <i class="far fa-edit"></i>
+          {if (isset($topic['id']))}
+          编辑话题
+          {else /}
           新建话题
+          {/if}
         </h2>
         <hr>
+        {if (isset($topic['id']))}
+        <form id="model-form" class="needs-validation" novalidate action="{:url('[topic.update]', ['id' => $topic->id])}" method="POST" accept-charset="UTF-8">
+          <input type="hidden" name="_method" value="PUT">
+        {else /}
         <form id="model-form" class="needs-validation" novalidate action="{:url('[topic.save]')}" method="POST" accept-charset="UTF-8">
+        {/if}
           <div class="form-group">
-            <input class="form-control" type="text" name="title" id="title-field" value="" placeholder="请填写标题" required/>
+            <input class="form-control" type="text" name="title" id="title-field" value="{$topic['title']|default=''}" placeholder="请填写标题" required/>
           </div>
           <div class="form-group">
             <select class="form-control" name="category_id" required>
-              <option value="" hidden disabled selected>请选择分类</option>
+              <option value="" hidden disabled selected <?php if (!isset($topic['id'])) { echo('selected'); } ?>>请选择分类</option>
               {volist name='categories' id='category'}
-              <option value="{$category->id}">{$category->name}</option>
+              <option value="{$category->id}" <?php if (isset($topic['category_id']) && $topic['category_id']==$category->id) { echo('selected'); } ?>>
+                {$category->name}
+              </option>
               {/volist}
             </select>
           </div>
           <div class="form-group">
-            <textarea name="body" id="body-field" class="form-control" rows="3"></textarea>
+            <textarea name="body" id="body-field" class="form-control" rows="3">{$topic['body']|default=''}</textarea>
           </div>
           <div class="well well-sm">
             <button type="submit" class="btn btn-primary">保存</button>

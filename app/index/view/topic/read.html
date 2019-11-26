@@ -46,9 +46,11 @@
 
         <div class="operate">
           <hr>
-          <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
+          {if $topic->canUpdate() }
+          <a href="{:url('[topic.edit]', ['id' => $topic->id])}" class="btn btn-outline-secondary btn-sm" role="button">
             <i class="far fa-edit"></i> 编辑
           </a>
+          {/if}
 
           <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
             <i class="far fa-trash-alt"></i> 删除
