@@ -36,7 +36,7 @@ class Upload extends Base
             $file = $this->request->file('image');
             try {
                 // 把用户头像等比缩小裁剪成宽度 416px
-                $upload_info = UploadModel::saveImage($file, 416);
+                $upload_info = UploadModel::saveImage($file, UploadModel::TYPE_AVATAR, UploadModel::MAX_WIDTH_AVATAR);
                 // 保存成功的图片路径
                 $image = $upload_info['save_path'];
             } catch (ValidateException $e) {
@@ -53,5 +53,28 @@ class Upload extends Base
             'image' => $image,
             'error_msg' => $error_msg,
         ]);
+    }
+
+    public function simditor()
+    {
+        $file = $this->request->file('upfile');
+        try {
+            // 正文图片宽度压缩到 1024px
+            $upload_info = UploadModel::saveImage($file, UploadModel::TYPE_CONTENT, UploadModel::MAX_WIDTH_CONTENT);
+            $data = [
+                'status' => true,
+                'msg' => '上传成功',
+                'file_path' => $upload_info['save_path'],
+            ];
+        } catch (\Expection $e) {
+            $data = [
+                'status' => false,
+                'msg' => $e->getMessage(),
+            ];
+        }
+
+        // 变量$data值已经是Simditor编辑器需要返回的格式了
+        // 所以直接调用json()方法返回该数据
+        return json($data);
     }
 }

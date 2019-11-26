@@ -10,21 +10,37 @@ use app\common\exception\ValidateException;
 
 class Upload
 {
+    // 上传图片类型
+    // 用户头像
+    public const TYPE_AVATAR = 'avatar';
+    // 话题正文
+    public const TYPE_CONTENT = 'content';
+
+    // 上传图片压缩宽度
+    // 用户头像
+    public const MAX_WIDTH_AVATAR = 416;
+    // 话题正文
+    public const MAX_WIDTH_CONTENT = 1024;
+
     /**
     * 保存上传图片
     * @Author   zhanghong(Laifuzi)
     * @param    File               $file         文件信息
+    * @param    string             $type         文件类型
     * @param    int                $max_width    最大宽度
     * @return   array
     */
-    static public function saveImage($file, $max_width = 0): array
+    static public function saveImage($file, string $type, int $max_width = 0): array
     {
-        $validate = new AvatarValidate;
-        if (!$validate->batch(true)->check(['file' => $file])) {
-            $e = new ValidateException('上传图片失败');
-            $e->setData($validate->getError());
-            throw $e;
+        if ($type == static::TYPE_AVATAR) {
+            $validate = new AvatarValidate;
+            if (!$validate->batch(true)->check(['file' => $file])) {
+                $e = new ValidateException('上传图片失败');
+                $e->setData($validate->getError());
+                throw $e;
+            }
         }
+
 
         // 所有上传文件都保存在项目 public/storage/uploads 目录里
         $save_name = Filesystem::disk('public')->putFile('uploads', $file, 'md5');
