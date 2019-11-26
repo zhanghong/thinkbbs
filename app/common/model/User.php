@@ -17,6 +17,9 @@ class User extends Model
 {
     public const CURRENT_KEY = 'current_user';
 
+    // 指定时间戳输入格式化类名
+    public $dateFormat = '\app\common\model\dateFormat';
+
     /**
      * 验证字段值是否唯一
      * @Author   zhanghong(Laifuzi)
