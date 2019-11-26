@@ -51,3 +51,48 @@ function create_upload_image($backcall="image", $width=100, $height=100, $image=
     echo '<iframe scrolling="no" frameborder="0" border="0" onload="this.height=this.contentWindow.document.body.scrollHeight;this.width=this.contentWindow.document.body.scrollWidth;" width='.$width.' height="'.$height.'"  src="'.url('[upload.create]').'?width='.$width.'&height='.$height.'&backcall='.$backcall.'&image='.$image.'"></iframe>
          <input type="hidden" name="'.$backcall.'" id="'.$backcall.'">';
 }
+
+/**
+ * 顶部导航是否选中样式
+ * @Author   zhanghong(Laifuzi)
+ * @param    string             $route_name 路由路径
+ * @param    array              $param      判断参数
+ * @return   string
+ */
+function navbar_class(string $route_name, array $param = []): string
+{
+    $request = request();
+    // 获取请求控制器名称并转化成小写格式
+    $ctr_name = $request->controller(true);
+    // 获取请求操作方法名称并转化成小写格式
+    $act_name = $request->action(true);
+    $page_route = $ctr_name . '/' .$act_name;
+
+    if ($route_name != $page_route) {
+        // 当前路由路径 和 菜单项路由路径不相等
+        return '';
+    }
+
+    if (empty($param)) {
+        // 当前路由路径 和 菜单项路由路径相等 并且没有判断参数
+        // 菜单项必然是选中状态
+        return 'active';
+    }
+
+    $is_active = true;
+    // 只有当所有 判断参数 都相等时菜单项才是选中状态
+    foreach ($param as $name => $value) {
+        $param_value = $request->param($name);
+        $pm[$name] = $param_value;
+        if ($param_value != $value) {
+            $is_active = false;
+            break;
+        }
+    }
+
+    if ($is_active) {
+        return 'active';
+    } else {
+        return '';
+    }
+}

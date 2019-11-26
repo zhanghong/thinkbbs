@@ -11,6 +11,7 @@ use think\facade\Session;
 use think\exception\ValidateException;
 use app\common\model\User as UserModel;
 use app\common\model\Config as ConfigModel;
+use app\common\model\Category as CategoryModel;
 
 abstract class Base
 {
@@ -43,6 +44,10 @@ abstract class Base
                 }
             }
             View::assign('flash', $flash);
+
+            // 顶部导航里的话题分类列表
+            $categories = CategoryModel::order('id', 'ASC')->select();
+            View::assign('categories', $categories);
         }
 
         // 当前登录用户
