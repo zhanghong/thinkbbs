@@ -5,6 +5,8 @@ namespace app\common\model;
 
 use think\Model;
 use think\Paginator;
+use app\common\validate\Topic as Validate;
+use app\common\exception\ValidateException;
 
 /**
  * @mixin think\Model
@@ -97,5 +99,37 @@ class Topic extends Model
         }
 
         return $static->paginate($per_page);
+    }
+
+    /**
+     * 创建记录
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $data 表单提交数据
+     * @return   Topic
+     */
+    public static function createItem(array $data): Topic
+    {
+        $validate = new Validate;
+        if (!$validate->batch(true)->check($data)) {
+            $e = new ValidateException('数据验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        $data['user_id'] = 0;
+        $current_user = User::currentUser();
+        if (!empty($current_user)) {
+            // 如果登录用户存在时，user_id 等于当前登录用户ID
+            $data['user_id'] = $current_user->id;
+        }
+
+        try {
+            $topic = new static;
+            $topic->allowField(['title', 'category_id', 'body', 'user_id'])->save($data);
+        } catch (\Exception $e) {
+            throw new \Exception('创建话题失败');
+        }
+
+        return $topic;
     }
 }
