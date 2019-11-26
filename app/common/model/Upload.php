@@ -4,6 +4,8 @@ declare (strict_types = 1);
 namespace app\common\model;
 
 use think\facade\Filesystem;
+use app\common\validate\Avatar as AvatarValidate;
+use app\common\exception\ValidateException;
 
 class Upload
 {
@@ -15,6 +17,13 @@ class Upload
     */
     static public function saveImage($file): array
     {
+        $validate = new AvatarValidate;
+        if (!$validate->batch(true)->check(['file' => $file])) {
+            $e = new ValidateException('上传图片失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
         // 所有上传文件都保存在项目 public/storage/uploads 目录里
         $save_name = Filesystem::disk('public')->putFile('uploads', $file, 'md5');
 
