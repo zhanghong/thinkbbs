@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {block name="title"}
+    {$site.title|default='ThinkPHP 开发实践教程'}
+    {/block}
+  </title>
+  <meta name="description" content="{$site.description|default='ThinkPHP 开发实践教程'}" />
+  <meta name="keyword" content="{$site.keywords|default='ThinkPHP'}" />
+
+  <!-- Styles -->
+  {css href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" /}
+  {css href="https://cdn.bootcss.com/font-awesome/5.10.0-11/css/all.min.css" /}
+  <link rel="stylesheet" type="text/css" href="<?php echo(asset_path('/static/assets/index/css/app.css')); ?>">
+
+  {block name="styles"}{/block}
+  {notempty name='site.tongji'}
+  {$site.tongji|raw}
+  {/notempty}
+</head>
+<body>
+  <div id="app" class="<?php echo(route_class()); ?>">
+    {include file="layout/_header" /}
+    <div class="container">
+      {include file="widget/_message" /}
+      {block name="content"}{/block}
+    </div>
+    {include file="layout/_footer" /}
+  </div>
+  <!-- Scripts -->
+  {js href="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js" /}
+  {js href="https://cdn.bootcss.com/popper.js/1.15.0/umd/popper.min.js" /}
+  {js href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js" /}
+  <script type="text/javascript" src="<?php echo(asset_path('/static/assets/index/js/app.js')); ?>"></script>
+  {block name="scripts"}{/block}
+</body>
+</html>
