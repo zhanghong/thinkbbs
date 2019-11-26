@@ -35,7 +35,9 @@ class Upload extends Base
         if ($this->request->isPost()) {
             $file = $this->request->file('image');
             try {
-                $upload_info = UploadModel::saveImage($file);
+                // 把用户头像等比缩小裁剪成宽度 416px
+                $upload_info = UploadModel::saveImage($file, 416);
+                // 保存成功的图片路径
                 $image = $upload_info['save_path'];
             } catch (ValidateException $e) {
                 $errors = $e->getData();
