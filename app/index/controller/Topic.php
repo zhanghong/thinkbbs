@@ -9,8 +9,9 @@ class Topic extends Base
 {
     public function index()
     {
+        $param = $this->request->only(['order'], 'get');
         return $this->fetch('index', [
-            'paginate' => TopicModel::minePaginate(),
+            'paginate' => TopicModel::minePaginate($param),
         ]);
     }
 
