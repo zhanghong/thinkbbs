@@ -4,8 +4,9 @@ declare (strict_types = 1);
 namespace app\common\model;
 
 use think\Model;
+use think\facade\Db;
 use think\facade\Session;
-
+use think\Paginator;
 use app\common\validate\User as Validate;
 use app\common\validate\Login as LoginValidate;
 use app\common\exception\ValidateException;
@@ -238,6 +239,20 @@ class User extends Model
     }
 
     /**
+     * 用户注册时间
+     * @Author   zhanghong(Laifuzi)
+     * @return   string
+     */
+    public function getSignupTimeAttr()
+    {
+        $create_time = $this->getData('create_time');
+        if (empty($create_time)) {
+            return '';
+        }
+        return date('Y-m-d H:i:s', $create_time);
+    }
+
+    /**
      * 是否是实例对象的作者
      * @Author   zhanghong(Laifuzi)
      * @param    Object             $item 实例对象
@@ -250,5 +265,46 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * 后台模块搜索方法
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $params    搜索参数
+     * @param    int                $page_rows 每页显示数量
+     * @return   Paginator
+     */
+    public static function adminPaginate(array $params = [], int $page_rows = 15): Paginator
+    {
+        $static = static::order('id', 'DESC');
+        $map = [];
+        foreach ($params as $name => $text) {
+            $text = trim($text);
+            switch ($name) {
+                case 'keyword':
+                    if (!empty($text)) {
+                        $like_text = '%'.$text.'%';
+                        $static = $static->whereOr([['name', 'LIKE', $like_text], ['mobile', 'LIKE', $like_text]]);
+                    }
+                    break;
+            }
+        }
+
+        return $static->paginate($page_rows, false, ['query' => $params]);
+    }
+
+    /**
+     * 话题删除后事件
+     * @Author   zhanghong(Laifuzi)
+     * @param    User               $user  用户实例
+     * @return   bool
+     */
+    public static function onBeforeDelete(User $user)
+    {
+        // 这里不要使用 Model 删除方法，否则会出现监听事件循环调用
+        // Db::name接收的参数「表名」，不用包含数据表名辍
+        Db::name('topic')->where('user_id', $user->id)->delete();
+        Db::name('reply')->where('user_id', $user->id)->delete();
+        return true;
     }
 }
