@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\index\controller;
 
 use think\facade\Session;
+use app\common\model\Link as LinkModel;
 use app\common\model\User as UserModel;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Reply as ReplyModel;
@@ -22,6 +23,7 @@ class Topic extends Base
         return $this->fetch('index', [
             'paginate' => TopicModel::minePaginate($param),
             'active_users' => UserModel::getActiveUsers(),
+            'links' => LinkModel::selectAll(), // 资源推荐
         ]);
     }
 

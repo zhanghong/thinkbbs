@@ -12,4 +12,11 @@ Route::group(function(){
     // 回复管理
     Route::get('/reply', 'Reply@index')->name('admin.reply.index');
     Route::delete('/reply/<id>', 'reply/delete')->name('admin.reply.delete');
+    // 资源管理
+    Route::post('link', 'Link@save')->name('admin.link.save');
+    Route::get('link/create', 'Link@create')->name('admin.link.create');
+    Route::get('link/<id>/edit', 'Link@edit')->name('admin.link.edit');
+    Route::put('link/<id>', 'Link@update')->name('admin.link.update');
+    Route::delete('link/<id>', 'Link@delete')->name('admin.link.delete');
+    Route::get('link', 'Link@index')->name('admin.link.index');
 })->middleware(['tpadmin.admin', 'tpadmin.admin.role'])->prefix('\\app\\admin\\controller\\');
