@@ -6,6 +6,7 @@ namespace app\common\model;
 use think\Model;
 use think\Paginator;
 use think\helper\Str;
+use think\facade\Db;
 use app\common\validate\Topic as Validate;
 use app\common\exception\ValidateException;
 
@@ -201,6 +202,20 @@ class Topic extends Model
         } else if (!$current_user->isAuthorOf($this)) {
             return false;
         }
+        return true;
+    }
+
+    /**
+     * 话题删除后事件
+     * @Author   zhanghong(Laifuzi)
+     * @param    Topic              $topic 话题实例
+     * @return   bool
+     */
+    public static function onBeforeDelete(Topic $topic)
+    {
+        // 这里不要使用 Model 删除方法，否则会出现监听事件循环调用
+        // Db::name接收的参数「表名」，不用包含数据库表名辍
+        Db::name('reply')->where('topic_id', $topic->id)->delete();
         return true;
     }
 }

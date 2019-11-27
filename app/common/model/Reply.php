@@ -96,4 +96,43 @@ class Reply extends Model
             $topic->save();
         }
     }
+
+    /**
+     * 是否可以删除回复
+     * @Author   zhanghong(Laifuzi)
+     * @return   bool
+     */
+    public function canDelete(): bool
+    {
+        $current_user = User::currentUser();
+        if (empty($current_user)) {
+            return false;
+        }
+
+        if ($current_user->isAuthorOf($this)) {
+            return true;
+        }
+
+        $topic = $this->topic;
+        if (empty($topic) || $current_user->isAuthorOf($topic)) {
+            // 回复所属话题为空时也可以被删除
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 话题删除后事件
+     * @Author   zhanghong(Laifuzi)
+     * @param    Reply              $reply 评论实例
+     */
+    public static function onAfterDelete(Reply $reply)
+    {
+        $topic = $reply->topic;
+        if (!empty($topic)) {
+            $topic->reply_count = $topic->replies()->count();
+            $topic->save();
+        }
+    }
 }
