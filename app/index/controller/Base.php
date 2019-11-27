@@ -51,7 +51,11 @@ abstract class Base
         }
 
         // 当前登录用户
-        View::assign('current_user', UserModel::currentUser());
+        $current_user = UserModel::currentUser();
+        if (!empty($current_user)) {
+            $current_user->recordLastActiveTime();
+        }
+        View::assign('current_user', $current_user);
     }
 
     /**
