@@ -3,7 +3,7 @@
 use think\facade\Route;
 
 // 首页
-Route::get('/', 'index/index')->name('page.root');
+Route::get('/', 'topic/index')->name('page.root');
 
 // 注册
 Route::post('signup/send_code', 'register/send_code')->name('signup.send_code');
