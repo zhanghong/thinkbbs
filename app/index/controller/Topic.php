@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\index\controller;
 
 use think\facade\Session;
+use app\common\model\User as UserModel;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Reply as ReplyModel;
 use app\common\model\Category as CategoryModel;
@@ -20,6 +21,7 @@ class Topic extends Base
         $param = $this->request->only(['order'], 'get');
         return $this->fetch('index', [
             'paginate' => TopicModel::minePaginate($param),
+            'active_users' => UserModel::getActiveUsers(),
         ]);
     }
 
