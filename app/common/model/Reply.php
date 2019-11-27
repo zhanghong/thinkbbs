@@ -5,6 +5,7 @@ namespace app\common\model;
 
 use think\Model;
 use think\Paginator;
+use think\facade\Config;
 use app\common\validate\Reply as Validate;
 use app\common\exception\ValidateException;
 
@@ -48,6 +49,22 @@ class Reply extends Model
             }
         }
         return $static->paginate($per_page);
+    }
+
+    /**
+     * 评论新增后事件
+     * @Author   zhanghong(Laifuzi)
+     * @param    Reply              $reply 评论实例
+     * @return   bool
+     */
+    public static function onBeforeInsert(Reply $reply)
+    {
+        $cfg = Config::get('purifier');
+        $config = \HTMLPurifier_HTML5Config::create($cfg);
+        $purifier = new \HTMLPurifier($config);
+        $reply->content = $purifier->purify($reply->content);
+
+        return true;
     }
 
     /**
