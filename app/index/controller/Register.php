@@ -13,7 +13,7 @@ class Register extends Base
 {
     public function create()
     {
-        return $this->fetch('create');
+        return $this->fetch('register/create');
     }
 
     public function save(User $user)

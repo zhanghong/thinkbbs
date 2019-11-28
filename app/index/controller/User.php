@@ -11,10 +11,6 @@ use app\common\exception\ValidateException;
 
 class User extends Base
 {
-    protected $middleware = [
-        'auth' => ['except' => ['read']],
-    ];
-
     public function read($id)
     {
         $user = UserModel::find(intval($id));
@@ -38,14 +34,14 @@ class User extends Base
             $assigns['topic_paginate'] = TopicModel::minePaginate(['user_id' => $user->id], 5);
         }
 
-        return $this->fetch('read', $assigns);
+        return $this->fetch('user/read', $assigns);
     }
 
     public function edit()
     {
         $currentUser = UserModel::currentUser();
 
-        return $this->fetch('edit', [
+        return $this->fetch('user/edit', [
           'user' => $currentUser->refresh(),
         ]);
     }

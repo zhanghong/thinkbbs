@@ -12,7 +12,7 @@ class Reset extends Base
 {
     public function create()
     {
-        return $this->fetch('create');
+        return $this->fetch('reset/create');
     }
 
     public function save()

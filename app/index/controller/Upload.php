@@ -46,7 +46,7 @@ class Upload extends Base
             }
         }
 
-        return $this->fetch('create', [
+        return $this->fetch('upload/create', [
             'backcall' => $backcall,
             'width' => $width,
             'height' => $height,

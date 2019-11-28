@@ -34,6 +34,7 @@ return [
     'request_cache_except'  => [],
     // 默认控制器名
     'default_controller'    => 'Index',
+    // 'default_controller'    => 'Topic',
     // 默认操作名
     'default_action'        => 'index',
     // 操作方法后缀

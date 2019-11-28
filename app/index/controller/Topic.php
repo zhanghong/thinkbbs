@@ -13,14 +13,10 @@ use app\common\exception\ValidateException;
 
 class Topic extends Base
 {
-    protected $middleware = [
-        'auth' => ['except' => ['index', 'read']],
-    ];
-
     public function index()
     {
         $param = $this->request->only(['order'], 'get');
-        return $this->fetch('index', [
+        return $this->fetch('topic/index', [
             'paginate' => TopicModel::minePaginate($param),
             'active_users' => UserModel::getActiveUsers(),
             'links' => LinkModel::selectAll(), // 资源推荐
@@ -29,7 +25,7 @@ class Topic extends Base
 
     public function create()
     {
-        return $this->fetch('form', [
+        return $this->fetch('topic/form', [
             'categories' => CategoryModel::select(),
             'topic' => [],
         ]);
