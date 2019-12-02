@@ -1,2 +1,4 @@
-*
-!.gitignore
+# 忽略 mac 系统的隐藏文件
+.DS_Store
+# 忽略 vi/vim 非正常关闭文件
+*.swp

@@ -1,0 +1,63 @@
+{extend name="layout/base" /} {block name="main"}
+<div class="row-content am-cf">
+    <div class="row am-cf">
+        <div class="am-u-sm-12 am-u-md-8">
+            <div class="widget am-cf">
+                <div class="widget-head am-cf">
+                    <div class="widget-title am-fl">操作记录</div>
+                    <div class="widget-function am-fr">
+                        <a href="{:url('tadmin.auth.log')}" class="am-icon-list"></a>
+                    </div>
+                </div>
+                <div class="widget-body-md widget-body am-fr">
+                    <ul class="am-list am-list-static">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="am-u-sm-12 am-u-md-4">
+            <div class="widget am-cf">
+                <div class="widget-head am-cf">
+                    <div class="widget-title am-fl">系统信息</div>
+                    <div class="widget-function am-fr">
+
+                    </div>
+                </div>
+                <div class="widget-body widget-body-md am-fr">
+                    <ul class="am-list am-list-static">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row am-cf">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-4 widget-margin-bottom-lg ">
+            <div class="tpl-user-card am-text-center widget-body-lg">
+
+            </div>
+        </div>
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 widget-margin-bottom-lg">
+            <div class="widget am-cf widget-body-lg">
+                <div class="widget-body  am-fr">
+                    <div class="am-scrollable-horizontal ">
+                        <table width="100%" class="am-table am-table-compact am-text-nowrap tpl-table-black " id="example-r">
+                            <thead>
+                                <tr>
+                                    <th>最新发布</th>
+                                    <th>作者</th>
+                                    <th>时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

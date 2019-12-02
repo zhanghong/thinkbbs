@@ -1,0 +1,121 @@
+{extend name="layout:base" /}
+{block name="main_content"}
+<?php if(isset($role['id'])): ?>
+<form class="form-horizontal adminform" id="model-form" method="post" action="{:url('[admin.auth.role.edit]', ['id' => $role.id])}">
+    <input type="hidden" name="_method" value="PUT">
+<?php else: ?>
+<form class="form-horizontal adminform" id="model-form" method="post" action="{:url('[admin.auth.role.save]')}">
+<?php endif; ?>
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">
+            角色名：<span class="red">*</span>
+        </label>
+        <div class="col-sm-10">
+            <input type="text" name="title" placeholder="例：运营专员" class="col-xs-10 col-sm-5" value="{$role.title|default=''}" required/>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1">显示状态：</label>
+        <div class="col-sm-10" style="padding-top:5px;">
+            <input name="status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" <?php if(isset($role['status']) && intval($role['status'])){ echo('checked="checked"'); } ?> />
+            <span class="lbl"></span>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 权限选择：  </label>
+        <div class="col-sm-9">
+            {volist name="rule_tree" id="v"}
+                <div class="row">
+                    <div class="widget-box">
+                        <div class="widget-header">
+                            <h4 class="widget-title">
+                                <label>
+                                    <input name="rule_ids[]" class="ace ace-checkbox-2 father" type="checkbox" value="{$v['id']}" <?php if(in_array($v['id'], $rule_ids)){echo('checked="checked"');} ?> onchange="changeGroupStatus(this);"/>
+                                    <span class="lbl"> {$v['title']}</span>
+                                </label>
+                            </h4>
+                            <div class="widget-toolbar">
+                                {notempty name="v.children"}
+                                <a href="#" data-action="collapse">
+                                    <i class="ace-icon fa fa-chevron-up"></i>
+                                </a>
+                                {/notempty}
+                            </div>
+                        </div>
+                        {notempty name="v.children"}
+                            <div class="widget-body">
+                                <div class="widget-main row">
+                                    {volist name="v.children" id="vv"}
+                                        <label class="col-xs-2" style="width:160px;">
+                                            <input name="rule_ids[]" class="ace ace-checkbox-2 children" type="checkbox" value="{$vv['id']}" <?php if(in_array($vv['id'], $rule_ids)){echo('checked="checked"');} ?>/>
+                                            <span class="lbl"> {$vv['title']}</span>
+                                        </label>
+                                        {notempty name="vv.children"}
+                                            {volist name="vv.children" id="vvv"}
+                                                <label class="col-xs-2" style="width:160px;">
+                                                    <input name="rule_ids[]" class="ace ace-checkbox-2 children" type="checkbox" value="{$vvv['id']}" <?php if(in_array($vvv['id'], $rule_ids)){echo('checked="checked"');} ?>/>
+                                                    <span class="lbl"> {$vvv['title']}</span>
+                                                </label>
+                                            {/volist}
+                                        {/notempty}
+                                    {/volist}
+                                </div>
+                            </div>
+                        {/notempty}
+                    </div>
+                </div>
+            {/volist}
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            <button class="btn btn-info" type="submit">
+                <i class="ace-icon fa fa-check bigger-110"></i>保存
+            </button>
+
+            &nbsp; &nbsp; &nbsp;
+            <button class="btn" type="reset">
+                <i class="ace-icon fa fa-undo bigger-110"></i>重置
+            </button>
+        </div>
+    </div>
+</form>
+{/block}
+{block name="page_js"}
+<script src="__TPADMIN_ASSETS__/plugins/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    function changeGroupStatus(clickItem){
+        var $checkItem = $(clickItem);
+        var $widgetBox = $checkItem.parents("div.widget-box");
+        var $checkboxChildren = $widgetBox.find('div.widget-body input.ace-checkbox-2.children');
+        $checkboxChildren.each(function(){
+            $(this).prop("checked", $checkItem.is(':checked'));
+        });
+    }
+
+    jQuery(function($){
+        validAndSubmitForm(
+            "form#model-form",
+            {
+                "title":{
+                    required: true,
+                    minlength: 2,
+                    maxlength: 10
+                }
+            },{
+                "title":{
+                    required: "角色组名不能为空",
+                    minlength: "角色组名不能少于2个字符",
+                    maxlength: "角色组名不能超过10个字符"
+                }
+            }
+        );
+    });
+</script>
+{/block}

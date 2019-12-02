@@ -1,0 +1,29 @@
+<?php if(isset($flash['success'])): ?>
+    <div class="alert alert-block alert-success">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <i class="ace-icon fa fa-check green"></i>
+        {$flash.success}
+    </div>
+<?php endif; ?>
+
+<?php if(isset($flash['info'])): ?>
+    <div class="alert alert-block alert-info">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <i class="ace-icon fa fa-check green"></i>
+        {$flash.info}
+    </div>
+<?php endif; ?>
+
+<?php if(isset($flash['danger'])): ?>
+    <div class="alert alert-block alert-danger">
+        <button type="button" class="close" data-dismiss="alert">
+            <i class="ace-icon fa fa-times"></i>
+        </button>
+        <i class="ace-icon fa fa-check green"></i>
+        {$flash.danger}
+    </div>
+<?php endif; ?>
