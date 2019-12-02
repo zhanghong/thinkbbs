@@ -1,0 +1,14 @@
+<footer class="footer">
+  <div class="container">
+    {notempty name='site.copyright'}
+    <p class="float-left">
+      由 {$site.copyright|raw} 设计和编码 <span style="color: #e27575;font-size: 14px;">❤</span>
+    </p>
+    {/notempty}
+    {notempty name='site.icp'}
+    <p class="float-right">
+      {$site.icp|raw}
+    </p>
+    {/notempty}
+  </div>
+</footer>
