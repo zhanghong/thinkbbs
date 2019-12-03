@@ -31,6 +31,11 @@ class User extends Validate
         'sms_code.filter_sms_code' => '短信验证码不正确',
     ];
 
+    protected $scene = [
+        'form_register'  =>  ['name', 'mobile', 'password', 'password_confirmation', 'sms_code'],
+        'reset_password'  =>  ['sms_code', 'password', 'password_confirmation'],
+    ];
+
     /**
      * 自定义验证方法-验证用户输入的短信验证码是否正确
      * @Author   zhanghong(Laifuzi)

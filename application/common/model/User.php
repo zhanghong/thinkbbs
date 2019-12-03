@@ -56,7 +56,7 @@ class User extends Model
     public static function register($data)
     {
         $validate = new Validate;
-        if(!$validate->batch(true)->check($data)){
+        if(!$validate->scene('form_register')->batch(true)->check($data)){
             $e = new ValidateException('注册数据验证失败');
             $e->setData($validate->getError());
             throw $e;
@@ -70,6 +70,42 @@ class User extends Model
         }
 
         return $user;
+    }
+
+    /**
+     * 重置密码
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $data 表单提交数据
+     * @return   bool
+     */
+    public static function resetPassword($data)
+    {
+        if(!isset($data['mobile'])){
+            $e = new ValidateException('重置密码验证失败');
+            $e->setData(['mobile' => '注册手机号码不能为空']);
+            throw $e;
+        }
+
+        $user = static::where('mobile', $data['mobile'])->find();
+        if(empty($user)){
+            $e = new ValidateException('重置密码验证失败');
+            $e->setData(['mobile' => '注册手机号码不在存']);
+            throw $e;
+        }
+
+        $validate = new Validate;
+        if(!$validate->batch(true)->scene('reset_password')->check($data)){
+            $e = new ValidateException('重置密码验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        $user->password = $data['password'];
+        $is_save = $user->save();
+        if(!$is_save){
+            throw new \Exception('重置密码失败');
+        }
+        return true;
     }
 
     /**
