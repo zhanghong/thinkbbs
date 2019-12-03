@@ -20,7 +20,23 @@
               <label for="mobile" class="col-md-4 col-form-label text-md-right">手机号码</label>
 
               <div class="col-md-6">
-                <input id="mobile" type="mobile" class="form-control" name="mobile" required autocomplete="off">
+                <div class="input-group">
+                  <input id="mobile" type="mobile" class="form-control" name="mobile" required autocomplete="off">
+
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" id="btn-send-code">
+                      发送验证码<span id="notice-seconds" class="hide">(<span id="left-seconds"></span>秒)</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="sms-code" class="col-md-4 col-form-label text-md-right">短信验证码</label>
+
+              <div class="col-md-6">
+                <input id="sms-code" type="text" class="form-control" name="sms_code" required>
               </div>
             </div>
 
@@ -63,7 +79,63 @@
 {block name="scripts"}
 {js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
 <script type="text/javascript">
+  var default_wait = 60;
+  var wait = default_wait;
+  function time() {
+    var $sendBtn = $("#btn-send-code");
+    var $spanNotice = $sendBtn.find("#notice-seconds");
+    var $spanSecond = $sendBtn.find("#left-seconds");
+    if (wait == 0) {
+      $sendBtn.removeClass("btn-secondary").addClass("btn-primary").removeAttr("disabled", "disabled");;
+      $spanNotice.addClass("hide");
+      wait = default_wait;
+    } else {
+      if ($spanNotice.hasClass("hide")) {
+        $sendBtn.removeClass("btn-primary").addClass("btn-secondary").attr("disabled", "disabled");
+        $spanNotice.removeClass("hide");
+      }
+      $spanSecond.html(wait);
+      wait--;
+      setTimeout(function() {
+        time()
+      }, 1000);
+    }
+  }
+
   jQuery(function($){
+    // 发送短信验证码
+    $("#btn-send-code").click(function() {
+      var $btnCurrent = $(this);
+      var inputMobile = $("input#mobile");
+      if (!inputMobile.length || !inputMobile.val().length) {
+        alert("请输入您的手机号码");
+        return false;
+      }
+      var mobile = parseInt(inputMobile.val())
+      if (mobile < 13000000000 || mobile > 19900000000) {
+        alert("请输入您的手机号码");
+        return false;
+      }
+      if ($btnCurrent.hasClass("btn-primary")) {
+        $.ajax({
+          url: "{:url('[signup.send_code]')}",
+          type: "POST",
+          dataType: "JSON",
+          data: {"mobile": mobile},
+          success: function(res) {
+            if (res["code"]) {
+              wait = default_wait;
+              time();
+            } else {
+              alert(res["msg"]);
+            }
+          }, error: function () {
+            alert("数据执行错误！");
+          }
+        });
+      }
+    });
+
     validAndSubmitForm(
       "form#model-form",
       {
@@ -79,6 +151,18 @@
             data: {
               field: "mobile",
               id: 0,
+              mobile: function() {
+                return $("input#mobile").val();
+              }
+            }
+          }
+        }, "sms_code":{
+          required: true,
+          rangelength: [6, 6],
+          remote: {
+            url: "{:url('[verify.valid_code]')}",
+            type: "post",
+            data: {
               mobile: function() {
                 return $("input#mobile").val();
               }
@@ -100,6 +184,10 @@
           required: "手机号码不能为空",
           range: "手机号码格式不正确",
           remote: "当前手机号码已注册"
+        }, "sms_code":{
+          required: "短信验证码不正确",
+          rangelength: "短信验证码不正确",
+          remote: "短信验证码不正确"
         }, "password":{
           required: "登录密码不能为空",
           rangelength: "登录密码长度必须在6-20之间"
