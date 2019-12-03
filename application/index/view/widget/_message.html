@@ -1,0 +1,9 @@
+{foreach $flash as $name=>$message }
+{notempty name="message"}
+<div class="flash-message">
+  <p class="alert alert-{$name}">
+    {$message}
+  </p>
+</div>
+{/notempty}
+{/foreach}
