@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use think\facade\Session;
+use app\common\model\User as UserModel;
 use app\common\model\Config as ConfigModel;
 
 class Base extends Controller
@@ -25,5 +26,9 @@ class Base extends Controller
             }
             $this->assign('flash', $flash);
         }
+
+        // 当前登录用户
+        $current_user = UserModel::currentUser();
+        $this->assign('current_user', $current_user);
     }
 }
