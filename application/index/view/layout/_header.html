@@ -27,7 +27,7 @@
             {$current_user.name}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="{:url('[user.read]', ['id' => $current_user->id])}">
               <i class="far fa-user mr-2"></i>
               个人中心
             </a>
