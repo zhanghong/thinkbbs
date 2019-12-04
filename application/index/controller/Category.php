@@ -4,6 +4,7 @@ namespace app\index\controller;
 
 use think\Request;
 use app\common\model\User as UserModel;
+use app\common\model\Link as LinkModel;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Category as CategoryModel;
 
@@ -24,6 +25,7 @@ class Category extends Base
             'category' => $category,
             'paginate' => TopicModel::minePaginate($param),
             'active_users' => UserModel::getActiveUsers(),
+            'links' => LinkModel::selectAll(), // 资源推荐
         ]);
     }
 }
