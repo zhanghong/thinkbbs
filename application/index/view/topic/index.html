@@ -19,16 +19,15 @@
       <div class="card-header bg-transparent">
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link <?php echo(order_active('order', 'recent', false)); ?>" href="<?php echo(request()->baseUrl()); ?>">
               最后回复
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link <?php echo(order_active('order', 'recent')); ?>" href="<?php echo(request()->baseUrl()); ?>?order=recent">
               最新发布
             </a>
           </li>
-
         </ul>
       </div>
 

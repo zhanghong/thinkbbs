@@ -117,3 +117,31 @@ function navbar_class($route_name, $param = [])
         return '';
     }
 }
+
+/**
+ * 排序方式导航是否active样式名
+ * @Author   zhanghong(Laifuzi)
+ * @param    string             $name     判断参数名
+ * @param    string             $value    判断参数值
+ * @param    bool               $is_equal 判断方式
+ * @return   string
+ */
+function order_active($name, $value, $is_equal = true)
+{
+    // 获取当前请求信息里的参数值
+    $param_value = request()->get($name);
+    $is_active = false;
+    if($is_equal == true && $param_value == $value){
+        // 页面请求参数值和判断参数值相等时为选中样式
+        $is_active = true;
+    }else if($is_equal != true && $param_value != $value){
+        // 页面请求参数值和判断参数值不等时为选中样式
+        $is_active = true;
+    }
+
+    if($is_active){
+        return 'active';
+    }else{
+        return '';
+    }
+}

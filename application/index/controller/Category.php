@@ -2,12 +2,13 @@
 
 namespace app\index\controller;
 
+use think\Request;
 use app\common\model\Topic as TopicModel;
 use app\common\model\Category as CategoryModel;
 
 class Category extends Base
 {
-    public function read($id)
+    public function read(Request $request, $id)
     {
         $category = CategoryModel::find($id);
         if (empty($category)) {
@@ -15,9 +16,8 @@ class Category extends Base
             return $this->redirect('[page.root]');
         }
 
-        $param = [
-            'category_id' => $category->id,
-        ];
+        $param = $request->only(['order'], 'get');
+        $param['category_id'] = $category->id;
 
         return $this->fetch('topic/index', [
             'category' => $category,

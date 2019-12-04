@@ -7,10 +7,11 @@ use app\common\model\Topic as TopicModel;
 
 class Topic extends Base
 {
-    public function index()
+    public function index(Request $request)
     {
+        $param = $request->only(['order'], 'get');
         return $this->fetch('index', [
-            'paginate' => TopicModel::minePaginate(),
+            'paginate' => TopicModel::minePaginate($param),
         ]);
     }
 
