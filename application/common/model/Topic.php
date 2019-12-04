@@ -110,6 +110,35 @@ class Topic extends Model
     }
 
     /**
+     * 后台模块搜索方法
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $params    请求参数
+     * @param    int                $page_rows 每页显示数量
+     * @return   Paginator
+     */
+    public static function adminPaginate($params = [], $page_rows = 15)
+    {
+        $static = static::order('id', 'DESC');
+        $map = [];
+        foreach ($params as $name => $text) {
+            $text = trim($text);
+            switch ($name) {
+                case 'category_id':
+                    $static = $static->where('category_id', intval($text));
+                    break;
+                case 'keyword':
+                    if (!empty($text)) {
+                        $like_text = '%'.$text.'%';
+                        $static = $static->whereLike('title', $like_text);
+                    }
+                    break;
+            }
+        }
+        // 同时预加载user和category进行分页查询
+        return $static->with(['user', 'category'])->paginate($page_rows, false, ['query' => $params]);
+    }
+
+    /**
      * 创建记录
      * @Author   zhanghong(Laifuzi)
      * @param    array              $data 表单提交数据
