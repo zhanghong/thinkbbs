@@ -47,6 +47,13 @@
   jQuery(function($){
     var editor = new Simditor({
       textarea: $('#body-field'),
+      upload: {
+        url: "{:url('[upload.simditor]')}",
+        fileKey: 'upfile',
+        connectionCount: 3,
+        leaveConfirm: '文件上传中，关闭此页面将取消上传。'
+      },
+      pasteImage: true,
     });
     validAndSubmitForm(
       "form#model-form",
