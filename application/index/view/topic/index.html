@@ -1,10 +1,19 @@
 {extend name="layout/main" /}
 {block name="title"}
-话题列表
+{if (isset($category) && !empty($category))}
+  {$category->name}
+{else /}
+  话题列表
+{/if}
 {/block}
 {block name="content"}
 <div class="row mb-5">
   <div class="col-lg-9 col-md-9 topic-list">
+    {if (isset($category) && !empty($category))}
+    <div class="alert alert-info" role="alert">
+      {$category->name} ：{$category->description}
+    </div>
+    {/if}
 
     <div class="card ">
       <div class="card-header bg-transparent">
