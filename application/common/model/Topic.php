@@ -17,4 +17,16 @@ class Topic extends Model
     {
         return $this->belongsTo('Category');
     }
+
+    /**
+     * 分页查询方法
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $params    请求参数
+     * @param    int                $page_rows 每页显示数量
+     * @return   Paginator
+     */
+    public static function minePaginate($param = [], $per_page = 20)
+    {
+        return static::with(['user', 'category'])->paginate($per_page);
+    }
 }
