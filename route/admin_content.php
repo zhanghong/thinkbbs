@@ -10,4 +10,7 @@ Route::group([
     // 话题管理
     Route::get('/topic', 'Topic@index')->name('admin.topic.index');
     Route::delete('/topic/<id>', 'topic/delete')->name('admin.topic.delete');
+    // 回复管理
+    Route::get('/reply', 'Reply@index')->name('admin.reply.index');
+    Route::delete('/reply/<id>', 'reply/delete')->name('admin.reply.delete');
 })->prefix('\\app\\admin\\controller\\');
