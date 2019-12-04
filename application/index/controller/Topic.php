@@ -79,12 +79,56 @@ class Topic extends Base
 
     public function edit($id)
     {
-        //
+        $message = null;
+        $topic = TopicModel::find($id);
+
+        if (empty($topic)) {
+            $message = '对不起，编辑话题不存在。';
+        } else if (!$topic->canUpdate()) {
+            $message = '对不起，您没有权限编辑该话题。';
+        }
+
+        if (!empty($message)) {
+            Session::set('danger', $message);
+            return $this->redirect('[topic.index]');
+        }
+
+        return $this->fetch('topic/form', [
+            'topic' => $topic,
+            'categories' => CategoryModel::select(),
+        ]);
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $message = null;
+        $topic = TopicModel::find($id);
+
+        if (empty($topic)) {
+            $message = '对不起，编辑话题不存在。';
+        } else if (!$topic->canUpdate()) {
+            $message = '对不起，您没有权限编辑该话题。';
+        } else if (!$request->isPut() || !$request->isAjax()) {
+            $message = '对不起，您访问的页面不存在。';
+        }
+
+        if (!empty($message)) {
+            Session::set('danger', $message);
+            return $this->error($message, '[topic.index]');
+        }
+
+        try {
+            $data = $request->post();
+            $topic->updateInfo($data);
+        } catch (ValidateException $e) {
+            return $this->error($e->getMessage(), null, ['errors' => $e->getData()]);
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage());
+        }
+
+        $message = '话题更新成功。';
+        Session::set('success', $message);
+        return $this->success($message, url('[topic.read]', ['id' => $topic->id]));
     }
 
     public function delete($id)

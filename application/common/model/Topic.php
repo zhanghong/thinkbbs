@@ -127,4 +127,39 @@ class Topic extends Model
 
         return $topic;
     }
+
+    /**
+     * 是否可以编辑记录
+     * @Author   zhanghong(Laifuzi)
+     * @return   bool
+     */
+    public function canUpdate()
+    {
+        $current_user = User::currentUser();
+        if (empty($current_user)) {
+            return false;
+        } else if ($this->user_id != $current_user->id) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 更新记录
+     * @Author   zhanghong(Laifuzi)
+     * @param    array              $data 表单提交数据
+     * @return   Topic
+     */
+    public function updateInfo($data)
+    {
+        $validate = new Validate;
+        if (!$validate->batch(true)->check($data)) {
+            $e = new ValidateException('数据验证失败');
+            $e->setData($validate->getError());
+            throw $e;
+        }
+
+        $this->allowField(['title', 'category_id', 'body', 'excerpt'])->save($data);
+        return $this;
+    }
 }
