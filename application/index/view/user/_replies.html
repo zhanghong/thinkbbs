@@ -1,0 +1,26 @@
+{if ($reply_paginate->count())}
+<ul class="list-group mt-4 border-0">
+  {volist name="$reply_paginate->all()" id="reply"}
+  <li class="list-group-item pl-2 pr-2 border-right-0 border-left-0 <?php if ($key==0) { echo('border-top-0'); } ?>">
+    <a href="{:url('[topic.read]', ['id' => $reply->topic_id])}">
+      {$reply->topic->title}
+    </a>
+
+    <div class="reply-content text-secondary mt-2 mb-2">
+      {$reply->content|raw=###}
+    </div>
+
+    <div class="text-secondary" style="font-size:0.9em;">
+      <i class="far fa-clock"></i> 回复于 {$reply->create_time}
+    </div>
+  </li>
+  {/volist}
+</ul>
+
+<!-- 分页 -->
+<div class="mt-4 pt-1">
+  <?php echo($reply_paginate->render()); ?>
+</div>
+{else /}
+<div class="empty-block">暂无数据 ~_~ </div>
+{/if}
