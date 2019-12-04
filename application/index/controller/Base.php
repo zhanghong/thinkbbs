@@ -34,6 +34,9 @@ class Base extends Controller
 
         // 当前登录用户
         $current_user = UserModel::currentUser();
+        if (!empty($current_user)) {
+            $current_user->recordLastActiveTime();
+        }
         $this->assign('current_user', $current_user);
     }
 }

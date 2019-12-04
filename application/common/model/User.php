@@ -28,8 +28,13 @@ class User extends Model
     protected const REPLY_WEIGHT = 1;  // 回复权重
     protected const PASS_DAYS = 7;     // 多少天内发表过内容
 
+    protected const LAST_ACTIVE_CACHE_KEY = 'last_active_at_';
+    protected const LAST_ACTIVE_PREFIX = 'user_';
+
     // 计算活跃用户 Trait
     use helper\ActiveUser;
+    // 用户最后活跃时间 Trait
+    use helper\LastActiveTime;
 
     /**
      * 后台模块搜索方法
