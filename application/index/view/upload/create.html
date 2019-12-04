@@ -15,6 +15,7 @@
 </head>
 <body>
   <form enctype="multipart/form-data" id="PostMe" action="" method="post" name="upform">
+    <input type="hidden" value="{$error_msg}" id="update-error">
     <input type="hidden" value="{$width}" name="width">
     <input type="hidden" value="{$height}" name="height">
     <input type="hidden" value="{$backcall}" name="backcall">
@@ -57,6 +58,12 @@
           $previewLink.addClass('hide');
         }
       }
+    }
+
+    var error_msg = $('#update-error').val();
+    if (error_msg.length) {
+      // 当错误提示信息不为空时，弹出警告框
+      alert(error_msg);
     }
   </script>
 </body>
