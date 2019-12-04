@@ -73,6 +73,9 @@
     <!-- 用户回复列表 -->
     <div class="card topic-reply mt-4">
       <div class="card-body">
+        {if (!empty($current_user))}
+        {include file="topic/_reply_box", 'topic'='$topic' /}
+        {/if}
         <!-- 用户回复列表 -->
         {include file="topic/_reply_list", 'reply_paginate'='$reply_paginate' /}
       </div>
@@ -83,10 +86,34 @@
 {block name="scripts"}
 {js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
 <script type="text/javascript">
-  // 删除话题
-  validAndSubmitForm(
-    "form#delete-topic",
-    {}, {}
-  );
+  jQuery(function($){
+    // 删除话题
+    validAndSubmitForm(
+      "form#delete-topic",
+      {}, {}
+    );
+
+    // 新建回复
+    validAndSubmitForm(
+      "form#reply-form",
+      {
+        "topic_id":{
+          required: true,
+          min: 1
+        }, "content":{
+          required: true,
+          rangelength: [3, 200]
+        }
+      }, {
+        "topic_id":{
+          required: '所属话题不能为空',
+          min: '所属话题不存在'
+        }, "content":{
+          required: '回复内容不能为空',
+          rangelength: '标题长度必须在3-200个字符之间'
+        }
+      }
+    );
+  });
 </script>
 {/block}

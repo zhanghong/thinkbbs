@@ -27,6 +27,12 @@ class Topic extends Model
         return $this->belongsTo('Category');
     }
 
+    // has many replies
+    public function replies()
+    {
+        return $this->hasMany('Reply');
+    }
+
     /**
      * 范围查询-最近回回复排序
      * @Author   zhanghong(Laifuzi)
