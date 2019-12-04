@@ -133,6 +133,18 @@ class Topic extends Base
 
     public function delete($id)
     {
-        //
+        $topic = TopicModel::find($id);
+
+        if (empty($topic)) {
+            return $this->error('删除话题不存在', '[topic.index]');
+        } else if (!$topic->canDelete()) {
+            return $this->error('对不起，您没有权限删除该话题', '[topic.index]');
+        }
+
+        $topic->delete();
+
+        $message = '删除成功';
+        Session::set('success', $message);
+        return $this->success($message, '[topic.index]');
     }
 }

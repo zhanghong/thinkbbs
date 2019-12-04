@@ -44,18 +44,28 @@
           {$topic->body|raw}
         </div>
 
+        {if ($topic->canUpdate() || $topic->canDelete()) }
         <div class="operate">
           <hr>
+
           {if $topic->canUpdate() }
           <a href="{:url('[topic.edit]', ['id' => $topic->id])}" class="btn btn-outline-secondary btn-sm" role="button">
             <i class="far fa-edit"></i> 编辑
           </a>
           {/if}
 
-          <a href="#" class="btn btn-outline-secondary btn-sm" role="button">
-            <i class="far fa-trash-alt"></i> 删除
-          </a>
+          {if $topic->canDelete() }
+          <form id="delete-topic" action="{:url('[topic.delete]', ['id' => $topic->id])}" method="post" style="display: inline-block;"
+            onsubmit="return confirm('您确定要删除吗？');">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-outline-secondary btn-sm" style="margin-left: 6px">
+              <i class="far fa-trash-alt"></i>
+              删除
+            </button>
+          </form>
+          {/if}
         </div>
+        {/if}
 
       </div>
     </div>
@@ -68,4 +78,14 @@
     </div>
   </div>
 </div>
+{/block}
+{block name="scripts"}
+{js href="/static/assets/plugins/jquery-validate/jquery.validate.min.js" /}
+<script type="text/javascript">
+  // 删除话题
+  validAndSubmitForm(
+    "form#delete-topic",
+    {}, {}
+  );
+</script>
 {/block}
