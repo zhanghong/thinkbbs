@@ -125,6 +125,19 @@ class User extends Model
     }
 
     /**
+     * 用户头像路径
+     * @Author   zhanghong(Laifuzi)
+     * @return   string
+     */
+    public function getAvatarPathAttr()
+    {
+        if (empty($this->avatar)) {
+            return '/static/assets/index/images/default_avatar.png';
+        }
+        return $this->avatar;
+    }
+
+    /**
      * 用户登录
      * @Author   zhanghong(Laifuzi)
      * @param    string             $mobile   登录手机号码
