@@ -20,6 +20,17 @@ class User extends Model
         static::observe(\app\common\observer\User::class);
     }
 
+    protected const ACTIVE_CACHE_KEY = 'active_users';
+    protected const ACTIVE_CACHE_SECONDS = 65*60;
+    protected const ACTIVE_LIMIT_NUMBER = 6;   // 取出来多少用户
+
+    protected const TOPIC_WEIGHT = 4;  // 话题权重
+    protected const REPLY_WEIGHT = 1;  // 回复权重
+    protected const PASS_DAYS = 7;     // 多少天内发表过内容
+
+    // 计算活跃用户 Trait
+    use helper\ActiveUser;
+
     /**
      * 后台模块搜索方法
      * @Author   zhanghong(Laifuzi)
