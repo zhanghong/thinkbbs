@@ -48,3 +48,4 @@ Route::get('category/<id>', 'category/read')->name('category.read');
 
 // 评论管理
 Route::post('reply', 'reply/save')->name('reply.save');
+Route::delete('reply/<id>', 'reply/delete')->name('reply.delete');

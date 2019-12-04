@@ -18,9 +18,16 @@
 
         <!-- 回复删除按钮 -->
         <span class="meta float-right ">
-          <a title="删除回复">
-            <i class="far fa-trash-alt"></i>
-          </a>
+          {if ($reply->canDelete())}
+          <form class="delete-reply" action="{:url('[reply.delete]', ['id' => $reply->id])}"
+            onsubmit="return confirm('确定要删除此评论？');"
+            method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-xs pull-left text-secondary">
+              <i class="far fa-trash-alt"></i>
+            </button>
+          </form>
+          {/if}
         </span>
       </div>
       <div class="reply-content text-secondary">

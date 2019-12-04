@@ -29,4 +29,13 @@ class Reply
             $topic->save();
         }
     }
+
+    public function afterDelete(ReplyModel $reply)
+    {
+        $topic = $reply->topic;
+        if(!empty($topic)){
+            $topic->reply_count = $topic->replies()->count();
+            $topic->save();
+        }
+    }
 }

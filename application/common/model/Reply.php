@@ -74,4 +74,29 @@ class Reply extends Model
 
         return $reply;
     }
+
+    /**
+     * 是否可以删除回复
+     * @Author   zhanghong(Laifuzi)
+     * @return   bool
+     */
+    public function canDelete()
+    {
+        $current_user = User::currentUser();
+        if (empty($current_user)) {
+            return false;
+        }
+
+        if ($current_user->isAuthorOf($this)) {
+            return true;
+        }
+
+        $topic = $this->topic;
+        if (empty($topic) || $current_user->isAuthorOf($topic)) {
+            // 回复所属话题为空时也可以被删除
+            return true;
+        }
+
+        return false;
+    }
 }

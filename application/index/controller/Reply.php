@@ -37,6 +37,34 @@ class Reply extends Base
 
     public function delete($id)
     {
+        $message = null;
+        $flash_name = null;
+        $reply = ReplyModel::find($id);
 
+        // 默认跳转页面
+        $redirect_url = '[page.root]';
+        if (empty($reply)) {
+            $flash_name = 'warning';
+            $message = '对不起，删除评论不存在。';
+        } else {
+            $redirect_url = url('[topic.read]', ['id' => $reply->topic_id]);
+
+            if (!$reply->canDelete()) {
+                $flash_name = 'danger';
+                $message = '对不起，您没有权限删除该评论。';
+            }
+        }
+
+        if (is_null($message)) {
+            // 当前用户可以删除该评论
+            $reply->delete();
+            $message = '评论删除成功。';
+            Session::set('success', $message);
+            return $this->success($message, $redirect_url);
+        } else {
+            // 把错误信息存储到 Session 里并跳转到其它页面
+            Session::set($flash_name, $message);
+            return $this->error($message, $redirect_url);
+        }
     }
 }
