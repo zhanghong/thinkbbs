@@ -34,6 +34,8 @@ class TopicSeed extends Seeder
             ];
 
             $topic = new Topic($data);
+            // is_seeder=true表示是命令行模拟数据，观察者忽略对user_id属性赋值
+            $topic->is_seeder = true;
             $topic->save();
             $i++;
         }
