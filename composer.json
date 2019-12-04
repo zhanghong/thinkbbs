@@ -22,7 +22,8 @@
         "overtrue/easy-sms": "^1.1",
         "fzaninotto/faker": "^1.8",
         "topthink/think-image": "^1.0",
-        "topthink/think-helper": "3.0.*"
+        "topthink/think-helper": "3.0.*",
+        "xemlock/htmlpurifier-html5": "^0.1.11"
     },
     "autoload": {
         "psr-4": {
