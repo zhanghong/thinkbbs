@@ -9,6 +9,10 @@ use app\common\exception\ValidateException;
 
 class User extends Base
 {
+    protected $middleware = [
+        'auth' => ['except' => ['read']],
+    ];
+
     public function read($id)
     {
         $user = UserModel::find(intval($id));
@@ -25,11 +29,6 @@ class User extends Base
     public function edit()
     {
         $currentUser = UserModel::currentUser();
-        if (empty($currentUser)) {
-            Session::flash('info', '请先登录系统。');
-            return $this->redirect('[page.login]');
-        }
-
         $user = UserModel::get($currentUser->id);
         if (empty($user)) {
             Session::flash('info', '请先登录系统。');
@@ -44,9 +43,7 @@ class User extends Base
     public function update(Request $request)
     {
         $currentUser = UserModel::currentUser();
-        if (empty($currentUser)) {
-            Session::flash('info', '请先登录系统。');
-        } else if (!$request->isAjax() || !$request->isPut() ) {
+        if (!$request->isAjax() || !$request->isPut() ) {
             Session::flash('danger', '对不起，你访问页面不存在。');
             return $this->redirect(url('[user.read]', ['id' => $currentUser->id]));
         }
